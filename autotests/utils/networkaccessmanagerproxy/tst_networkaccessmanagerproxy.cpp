@@ -22,125 +22,114 @@
 #include <networkaccessmanagerproxy.h>
 #include <webpageproxy.h>
 
+#include <QNetworkCookieJar>
 #include <qnetworkcookie.h>
-#include <qnetworkrequest.h>
 #include <qnetworkreply.h>
+#include <qnetworkrequest.h>
 
-class tst_NetworkAccessManagerProxy : public QObject
-{
-    Q_OBJECT
+class tst_NetworkAccessManagerProxy : public QObject {
+  Q_OBJECT
 
 public slots:
-    void initTestCase();
-    void cleanupTestCase();
-    void init();
-    void cleanup();
+  void initTestCase();
+  void cleanupTestCase();
+  void init();
+  void cleanup();
 
 private slots:
-    void networkaccessmanagerproxy_data();
-    void networkaccessmanagerproxy();
+  void networkaccessmanagerproxy_data();
+  void networkaccessmanagerproxy();
 
-    void primaryNetworkAccessManager();
-    void webPage();
+  void primaryNetworkAccessManager();
+  void webPage();
 
-    void createRequest_data();
-    void createRequest();
+  void createRequest_data();
+  void createRequest();
 };
 
 // Subclass that exposes the protected functions.
-class SubNetworkAccessManagerProxy : public NetworkAccessManagerProxy
-{
+class SubNetworkAccessManagerProxy : public NetworkAccessManagerProxy {
 public:
-    QNetworkReply *call_createRequest(QNetworkAccessManager::Operation op, QNetworkRequest const &request, QIODevice *outgoingData = 0)
-        { return SubNetworkAccessManagerProxy::createRequest(op, request, outgoingData); }
+  QNetworkReply *call_createRequest(QNetworkAccessManager::Operation op,
+                                    QNetworkRequest const &request,
+                                    QIODevice *outgoingData = 0) {
+    return SubNetworkAccessManagerProxy::createRequest(op, request,
+                                                       outgoingData);
+  }
 };
 
 // This will be called before the first test function is executed.
 // It is only called once.
-void tst_NetworkAccessManagerProxy::initTestCase()
-{
-}
+void tst_NetworkAccessManagerProxy::initTestCase() {}
 
 // This will be called after the last test function is executed.
 // It is only called once.
-void tst_NetworkAccessManagerProxy::cleanupTestCase()
-{
-}
+void tst_NetworkAccessManagerProxy::cleanupTestCase() {}
 
 // This will be called before each test function is executed.
-void tst_NetworkAccessManagerProxy::init()
-{
-}
+void tst_NetworkAccessManagerProxy::init() {}
 
 // This will be called after every test function.
-void tst_NetworkAccessManagerProxy::cleanup()
-{
+void tst_NetworkAccessManagerProxy::cleanup() {}
+
+void tst_NetworkAccessManagerProxy::networkaccessmanagerproxy_data() {}
+
+void tst_NetworkAccessManagerProxy::networkaccessmanagerproxy() {
+  SubNetworkAccessManagerProxy proxy;
+  QVERIFY(proxy.call_createRequest(QNetworkAccessManager::GetOperation,
+                                   QNetworkRequest(), (QIODevice *)0));
 }
 
-void tst_NetworkAccessManagerProxy::networkaccessmanagerproxy_data()
-{
-}
+// public void setPrimaryNetworkAccessManager(NetworkAccessManagerProxy
+// *primaryManager)
+void tst_NetworkAccessManagerProxy::primaryNetworkAccessManager() {
+  SubNetworkAccessManagerProxy proxy;
 
-void tst_NetworkAccessManagerProxy::networkaccessmanagerproxy()
-{
-    SubNetworkAccessManagerProxy proxy;
-    QVERIFY(proxy.call_createRequest(QNetworkAccessManager::GetOperation,
-            QNetworkRequest(),
-            (QIODevice*)0));
-}
+  NetworkAccessManagerProxy primaryManager;
 
-// public void setPrimaryNetworkAccessManager(NetworkAccessManagerProxy *primaryManager)
-void tst_NetworkAccessManagerProxy::primaryNetworkAccessManager()
-{
-    SubNetworkAccessManagerProxy proxy;
-
-    NetworkAccessManagerProxy primaryManager;
-
-    proxy.setPrimaryNetworkAccessManager(&primaryManager);
-    QCOMPARE(&primaryManager, proxy.primaryNetworkAccessManager());
-    QVERIFY(primaryManager.cookieJar()->parent() == &primaryManager);
+  proxy.setPrimaryNetworkAccessManager(&primaryManager);
+  QCOMPARE(&primaryManager, proxy.primaryNetworkAccessManager());
+  QVERIFY(primaryManager.cookieJar()->parent() == &primaryManager);
 }
 
 // public void setWebPage(WebPageProxy *page)
-void tst_NetworkAccessManagerProxy::webPage()
-{
-    SubNetworkAccessManagerProxy proxy;
+void tst_NetworkAccessManagerProxy::webPage() {
+  SubNetworkAccessManagerProxy proxy;
 
-    WebPageProxy webPage;
+  WebPageProxy webPage;
+  proxy.setWebPage(&webPage);
+  QCOMPARE(&webPage, proxy.webPage());
+}
+
+void tst_NetworkAccessManagerProxy::createRequest_data() {
+  QTest::addColumn<bool>("primary");
+  QTest::newRow("true") << true;
+  QTest::newRow("false") << false;
+}
+
+// protected QNetworkReply *createRequest(QNetworkAccessManager::Operation op,
+// QNetworkRequest const &request, QIODevice *outgoingData = 0)
+void tst_NetworkAccessManagerProxy::createRequest() {
+  QFETCH(bool, primary);
+
+  SubNetworkAccessManagerProxy proxy;
+  SubNetworkAccessManagerProxy primaryManager;
+  WebPageProxy webPage;
+  if (!primary) {
+    proxy.setPrimaryNetworkAccessManager(&primaryManager);
     proxy.setWebPage(&webPage);
-    QCOMPARE(&webPage, proxy.webPage());
-}
+  }
 
-void tst_NetworkAccessManagerProxy::createRequest_data()
-{
-    QTest::addColumn<bool>("primary");
-    QTest::newRow("true") << true;
-    QTest::newRow("false") << false;
-}
-
-// protected QNetworkReply *createRequest(QNetworkAccessManager::Operation op, QNetworkRequest const &request, QIODevice *outgoingData = 0)
-void tst_NetworkAccessManagerProxy::createRequest()
-{
-    QFETCH(bool, primary);
-
-    SubNetworkAccessManagerProxy proxy;
-    SubNetworkAccessManagerProxy primaryManager;
-    WebPageProxy webPage;
-    if (!primary) {
-        proxy.setPrimaryNetworkAccessManager(&primaryManager);
-        proxy.setWebPage(&webPage);
-    }
-
-    QIODevice *outgoingData = 0;
-    QNetworkRequest request;
-    QNetworkReply *reply = proxy.call_createRequest(QNetworkAccessManager::GetOperation, request, outgoingData);
-    QVERIFY(reply);
-    if (primary)
-        QCOMPARE(reply->request(), request);
-    else
-        QVERIFY(reply->request() != request);
+  QIODevice *outgoingData = 0;
+  QNetworkRequest request;
+  QNetworkReply *reply = proxy.call_createRequest(
+      QNetworkAccessManager::GetOperation, request, outgoingData);
+  QVERIFY(reply);
+  if (primary)
+    QCOMPARE(reply->request(), request);
+  else
+    QVERIFY(reply->request() != request);
 }
 
 QTEST_MAIN(tst_NetworkAccessManagerProxy)
 #include "tst_networkaccessmanagerproxy.moc"
-

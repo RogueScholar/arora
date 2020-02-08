@@ -20,23 +20,21 @@
 #ifndef ABOUTDIALOG_H
 #define ABOUTDIALOG_H
 
-#include <qdialog.h>
 #include "ui_aboutdialog.h"
+#include <qdialog.h>
 
-class AboutDialog : public QDialog, private Ui_AboutDialog
-{
-    Q_OBJECT
+class AboutDialog : public QDialog, private Ui_AboutDialog {
+  Q_OBJECT
 
 public:
-    AboutDialog(QWidget *parent = 0);
+  AboutDialog(QWidget *parent = 0);
 
 private slots:
-    void authorsButtonClicked();
-    void licenseButtonClicked();
+  void authorsButtonClicked();
+  void licenseButtonClicked();
 
 private:
-    void displayFile(const QString &fileName, const QString &title);
+  void displayFile(const QString &fileName, const QString &title);
 };
 
 #endif // ABOUTDIALOG_H
-

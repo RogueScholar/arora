@@ -75,34 +75,36 @@
 #include <qwebhistoryinterface.h>
 
 class HistoryManager;
-class HistoryModel : public QAbstractTableModel
-{
-    Q_OBJECT
+class HistoryModel : public QAbstractTableModel {
+  Q_OBJECT
 
 public slots:
-    void historyReset();
-    void entryAdded();
-    void entryUpdated(int offset);
+  void historyReset();
+  void historyGoingToChange();
+  void entryAdded();
+  void entryUpdated(int offset);
 
 public:
-    enum Roles {
-        DateRole = Qt::UserRole + 1,
-        DateTimeRole = Qt::UserRole + 2,
-        UrlRole = Qt::UserRole + 3,
-        UrlStringRole = Qt::UserRole + 4,
-        TitleRole = Qt::UserRole + 5,
-        MaxRole = TitleRole
-    };
+  enum Roles {
+    DateRole = Qt::UserRole + 1,
+    DateTimeRole = Qt::UserRole + 2,
+    UrlRole = Qt::UserRole + 3,
+    UrlStringRole = Qt::UserRole + 4,
+    TitleRole = Qt::UserRole + 5,
+    MaxRole = TitleRole
+  };
 
-    HistoryModel(HistoryManager *history, QObject *parent = 0);
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+  HistoryModel(HistoryManager *history, QObject *parent = 0);
+  QVariant headerData(int section, Qt::Orientation orientation,
+                      int role = Qt::DisplayRole) const;
+  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+  int columnCount(const QModelIndex &parent = QModelIndex()) const;
+  int rowCount(const QModelIndex &parent = QModelIndex()) const;
+  bool removeRows(int row, int count,
+                  const QModelIndex &parent = QModelIndex());
 
 private:
-    HistoryManager *m_history;
+  HistoryManager *m_history;
 };
 
 /*!
@@ -110,185 +112,189 @@ private:
     Both m_sourceRow and m_historyHash store their offsets not from
     the front of the list, but as offsets from the back.
   */
-class HistoryFilterModel : public QAbstractProxyModel
-{
-    Q_OBJECT
+class HistoryFilterModel : public QAbstractProxyModel {
+  Q_OBJECT
 
 public:
-    HistoryFilterModel(QAbstractItemModel *sourceModel, QObject *parent = 0);
+  HistoryFilterModel(QAbstractItemModel *sourceModel, QObject *parent = 0);
 
-    inline bool historyContains(const QString &url) const
-        { load(); return m_historyHash.contains(url); }
-    int historyLocation(const QString &url) const;
+  inline bool historyContains(const QString &url) const {
+    load();
+    return m_historyHash.contains(url);
+  }
+  int historyLocation(const QString &url) const;
 
-    enum Roles {
-        FrecencyRole = HistoryModel::MaxRole + 1,
-        MaxRole = FrecencyRole
-    };
+  enum Roles {
+    FrecencyRole = HistoryModel::MaxRole + 1,
+    MaxRole = FrecencyRole
+  };
 
-    QModelIndex mapFromSource(const QModelIndex &sourceIndex) const;
-    QModelIndex mapToSource(const QModelIndex &proxyIndex) const;
-    void setSourceModel(QAbstractItemModel *sourceModel);
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    QModelIndex index(int, int, const QModelIndex &parent = QModelIndex()) const;
-    QModelIndex parent(const QModelIndex &index = QModelIndex()) const;
-    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+  QModelIndex mapFromSource(const QModelIndex &sourceIndex) const;
+  QModelIndex mapToSource(const QModelIndex &proxyIndex) const;
+  void setSourceModel(QAbstractItemModel *sourceModel);
+  QVariant headerData(int section, Qt::Orientation orientation,
+                      int role = Qt::DisplayRole) const;
+  int rowCount(const QModelIndex &parent = QModelIndex()) const;
+  int columnCount(const QModelIndex &parent = QModelIndex()) const;
+  QModelIndex index(int, int, const QModelIndex &parent = QModelIndex()) const;
+  QModelIndex parent(const QModelIndex &index = QModelIndex()) const;
+  bool removeRows(int row, int count,
+                  const QModelIndex &parent = QModelIndex());
+  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
-    void recalculateFrecencies();
+  void recalculateFrecencies();
 
 private slots:
-    void sourceReset();
-    void sourceDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
-    void sourceRowsInserted(const QModelIndex &parent, int start, int end);
-    void sourceRowsRemoved(const QModelIndex &, int, int);
-    void refreshFrecencies();
+  void sourceReset();
+  void sourceDataChanged(const QModelIndex &topLeft,
+                         const QModelIndex &bottomRight);
+  void sourceRowsInserted(const QModelIndex &parent, int start, int end);
+  void sourceRowsRemoved(const QModelIndex &, int, int);
+  void refreshFrecencies();
 
 private:
-    void load() const;
-    void startFrecencyTimer();
+  void load() const;
+  void startFrecencyTimer();
 
-    QTimer m_frecencyTimer;
-    QString m_lastSavedUrl;
+  QTimer m_frecencyTimer;
+  QString m_lastSavedUrl;
 
-    struct HistoryData {
-        int tailOffset;
-        int frecency;
+  struct HistoryData {
+    int tailOffset;
+    int frecency;
 
-        HistoryData(int off, int f = 0) : tailOffset(off), frecency(f) { }
+    HistoryData(int off, int f = 0) : tailOffset(off), frecency(f) {}
 
-        bool operator==(const HistoryData &other) const {
-            return (tailOffset == other.tailOffset)
-                && (frecency == -1 || other.frecency == -1 || frecency == other.frecency);
-        }
-        bool operator!=(const HistoryData &other) const {
-            return !(*this == other);
-        }
-        // like the actual history entries, our index mapping data is sorted in reverse
-        bool operator<(const HistoryData &other) const {
-            return (tailOffset > other.tailOffset);
-        }
-    };
-    int frecencyScore(const QModelIndex &sourceIndex) const;
+    bool operator==(const HistoryData &other) const {
+      return (tailOffset == other.tailOffset) &&
+             (frecency == -1 || other.frecency == -1 ||
+              frecency == other.frecency);
+    }
+    bool operator!=(const HistoryData &other) const {
+      return !(*this == other);
+    }
+    // like the actual history entries, our index mapping data is sorted in
+    // reverse
+    bool operator<(const HistoryData &other) const {
+      return (tailOffset > other.tailOffset);
+    }
+  };
+  int frecencyScore(const QModelIndex &sourceIndex) const;
 
-    mutable QList<HistoryData> m_filteredRows;
-    mutable QHash<QString, int> m_historyHash;
-    mutable bool m_loaded;
-    mutable QDateTime m_scaleTime;
+  mutable QList<HistoryData> m_filteredRows;
+  mutable QHash<QString, int> m_historyHash;
+  mutable bool m_loaded;
+  mutable QDateTime m_scaleTime;
 };
 
 /*
     The history menu
-    - Removes the first twenty entries and puts them as children of the top level.
-    - If there are less then twenty entries then the first folder is also removed.
+    - Removes the first twenty entries and puts them as children of the top
+   level.
+    - If there are less then twenty entries then the first folder is also
+   removed.
 
     The mapping is done by knowing that HistoryTreeModel is over a table
     We store that row offset in our index's private data.
 */
 class HistoryTreeModel;
-class HistoryMenuModel : public QAbstractProxyModel
-{
-    Q_OBJECT
+class HistoryMenuModel : public QAbstractProxyModel {
+  Q_OBJECT
 
 public:
-    HistoryMenuModel(HistoryTreeModel *sourceModel, QObject *parent = 0);
-    int columnCount(const QModelIndex &parent) const;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QModelIndex mapFromSource(const QModelIndex & sourceIndex) const;
-    QModelIndex mapToSource(const QModelIndex & proxyIndex) const;
-    QModelIndex index(int, int, const QModelIndex &parent = QModelIndex()) const;
-    QModelIndex parent(const QModelIndex &index = QModelIndex()) const;
-    QMimeData *mimeData(const QModelIndexList &indexes) const;
-    QModelIndex buddy(const QModelIndex &index) const;
+  HistoryMenuModel(HistoryTreeModel *sourceModel, QObject *parent = 0);
+  int columnCount(const QModelIndex &parent) const;
+  int rowCount(const QModelIndex &parent = QModelIndex()) const;
+  QModelIndex mapFromSource(const QModelIndex &sourceIndex) const;
+  QModelIndex mapToSource(const QModelIndex &proxyIndex) const;
+  QModelIndex index(int, int, const QModelIndex &parent = QModelIndex()) const;
+  QModelIndex parent(const QModelIndex &index = QModelIndex()) const;
+  QMimeData *mimeData(const QModelIndexList &indexes) const;
+  QModelIndex buddy(const QModelIndex &index) const;
 
-    int bumpedRows() const;
+  int bumpedRows() const;
 
 private:
-    HistoryTreeModel *m_treeModel;
+  HistoryTreeModel *m_treeModel;
 };
 
 // Menu that is dynamically populated from the history
-class HistoryMenu : public ModelMenu
-{
-    Q_OBJECT
+class HistoryMenu : public ModelMenu {
+  Q_OBJECT
 
 signals:
-    void openUrl(const QUrl &url, const QString &title);
+  void openUrl(const QUrl &url, const QString &title);
 
 public:
-    HistoryMenu(QWidget *parent = 0);
-    void setInitialActions(QList<QAction*> actions);
+  HistoryMenu(QWidget *parent = 0);
+  void setInitialActions(QList<QAction *> actions);
 
 protected:
-    bool prePopulated();
-    void postPopulated();
+  bool prePopulated();
+  void postPopulated();
 
 private slots:
-    void activated(const QModelIndex &index);
-    void showHistoryDialog();
-    void clearHistoryDialog();
+  void activated(const QModelIndex &index);
+  void showHistoryDialog();
+  void clearHistoryDialog();
 
 private:
-    HistoryManager *m_history;
-    HistoryMenuModel *m_historyMenuModel;
-    QList<QAction*> m_initialActions;
+  HistoryManager *m_history;
+  HistoryMenuModel *m_historyMenuModel;
+  QList<QAction *> m_initialActions;
 };
 
 // proxy model for the history model that converts the list
 // into a tree, one top level node per day.
 // Used in the HistoryDialog.
-class HistoryTreeModel : public QAbstractProxyModel
-{
-    Q_OBJECT
+class HistoryTreeModel : public QAbstractProxyModel {
+  Q_OBJECT
 
 public:
-    HistoryTreeModel(QAbstractItemModel *sourceModel, QObject *parent = 0);
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    int columnCount(const QModelIndex &parent) const;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QModelIndex mapFromSource(const QModelIndex &sourceIndex) const;
-    QModelIndex mapToSource(const QModelIndex &proxyIndex) const;
-    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-    QModelIndex parent(const QModelIndex &index = QModelIndex()) const;
-    bool hasChildren(const QModelIndex &parent = QModelIndex()) const;
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+  HistoryTreeModel(QAbstractItemModel *sourceModel, QObject *parent = 0);
+  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+  int columnCount(const QModelIndex &parent) const;
+  int rowCount(const QModelIndex &parent = QModelIndex()) const;
+  QModelIndex mapFromSource(const QModelIndex &sourceIndex) const;
+  QModelIndex mapToSource(const QModelIndex &proxyIndex) const;
+  QModelIndex index(int row, int column,
+                    const QModelIndex &parent = QModelIndex()) const;
+  QModelIndex parent(const QModelIndex &index = QModelIndex()) const;
+  bool hasChildren(const QModelIndex &parent = QModelIndex()) const;
+  Qt::ItemFlags flags(const QModelIndex &index) const;
+  bool removeRows(int row, int count,
+                  const QModelIndex &parent = QModelIndex());
+  QVariant headerData(int section, Qt::Orientation orientation,
+                      int role = Qt::DisplayRole) const;
 
-    void setSourceModel(QAbstractItemModel *sourceModel);
+  void setSourceModel(QAbstractItemModel *sourceModel);
 
 private slots:
-    void sourceReset();
-    void sourceRowsInserted(const QModelIndex &parent, int start, int end);
-    void sourceRowsRemoved(const QModelIndex &parent, int start, int end);
+  void sourceReset();
+  void sourceRowsInserted(const QModelIndex &parent, int start, int end);
+  void sourceRowsRemoved(const QModelIndex &parent, int start, int end);
 
 private:
-    int sourceDateRow(int row) const;
-    mutable QList<int> m_sourceRowCache;
-    bool removingDown;
-
+  int sourceDateRow(int row) const;
+  mutable QList<int> m_sourceRowCache;
+  bool removingDown;
 };
 
 #include "ui_history.h"
 
-class HistoryDialog : public QDialog, public Ui_HistoryDialog
-{
-    Q_OBJECT
+class HistoryDialog : public QDialog, public Ui_HistoryDialog {
+  Q_OBJECT
 
 signals:
-    void openUrl(const QUrl &url, const QString &title);
+  void openUrl(const QUrl &url, const QString &title);
 
 public:
-    HistoryDialog(QWidget *parent = 0, HistoryManager *history = 0);
+  HistoryDialog(QWidget *parent = 0, HistoryManager *history = 0);
 
 private slots:
-    void customContextMenuRequested(const QPoint &pos);
-    void open();
-    void copy();
-
+  void customContextMenuRequested(const QPoint &pos);
+  void open();
+  void copy();
 };
 
 #endif // HISTORY_H
-

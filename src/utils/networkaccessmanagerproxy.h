@@ -29,31 +29,33 @@
 #ifndef NETWORKACCESSMANAGERPROXY_H
 #define NETWORKACCESSMANAGERPROXY_H
 
-#include <qnetworkaccessmanager.h>
+#include <QNetworkAccessManager>
 
 class WebPageProxy;
-class NetworkAccessManagerProxy : public QNetworkAccessManager
-{
-    Q_OBJECT
+class NetworkAccessManagerProxy : public QNetworkAccessManager {
+  Q_OBJECT
 
 public:
-    NetworkAccessManagerProxy(QObject *parent = 0);
+  NetworkAccessManagerProxy(QObject *parent = 0);
 
-    void setPrimaryNetworkAccessManager(NetworkAccessManagerProxy *primaryManager);
-    NetworkAccessManagerProxy *primaryNetworkAccessManager() const { return m_primaryManager; }
+  void
+  setPrimaryNetworkAccessManager(NetworkAccessManagerProxy *primaryManager);
+  NetworkAccessManagerProxy *primaryNetworkAccessManager() const {
+    return m_primaryManager;
+  }
 
-    void setWebPage(WebPageProxy *page);
-    WebPageProxy *webPage() const { return m_webPage; };
+  void setWebPage(WebPageProxy *page);
+  WebPageProxy *webPage() const { return m_webPage; };
 
 protected:
-    QNetworkReply *createRequest(QNetworkAccessManager::Operation op, const QNetworkRequest &request, QIODevice *outgoingData = 0);
+  QNetworkReply *createRequest(QNetworkAccessManager::Operation op,
+                               const QNetworkRequest &request,
+                               QIODevice *outgoingData = 0);
 
 private:
-    friend class NetworkCookieJarProxy;
-    static NetworkAccessManagerProxy *m_primaryManager;
-    WebPageProxy *m_webPage;
-
+  friend class NetworkCookieJarProxy;
+  static NetworkAccessManagerProxy *m_primaryManager;
+  WebPageProxy *m_webPage;
 };
 
 #endif // NETWORKACCESSMANAGERPROXY_H
-

@@ -20,94 +20,82 @@
 #include <QtTest/QtTest>
 #include <cookiejar.h>
 
-class tst_CookieJar : public QObject
-{
-    Q_OBJECT
+class tst_CookieJar : public QObject {
+  Q_OBJECT
 
 public slots:
-    void initTestCase();
-    void cleanupTestCase();
-    void init();
-    void cleanup();
+  void initTestCase();
+  void cleanupTestCase();
+  void init();
+  void cleanup();
 
 private slots:
-    void cookiejar_data();
-    void cookiejar();
+  void cookiejar_data();
+  void cookiejar();
 
-    void acceptPolicy_data();
-    void acceptPolicy();
-    void allowedCookies_data();
-    void allowedCookies();
-    void allowForSessionCookies_data();
-    void allowForSessionCookies();
-    void blockedCookies_data();
-    void blockedCookies();
-    void clear_data();
-    void clear();
-    void cookiesForUrl_data();
-    void cookiesForUrl();
-    void keepPolicy_data();
-    void keepPolicy();
-    void loadSettings_data();
-    void loadSettings();
-    void setAcceptPolicy_data();
-    void setAcceptPolicy();
-    void setAllowedCookies_data();
-    void setAllowedCookies();
-    void setAllowForSessionCookies_data();
-    void setAllowForSessionCookies();
-    void setBlockedCookies_data();
-    void setBlockedCookies();
-    void setCookiesFromUrl_data();
-    void setCookiesFromUrl();
-    void setKeepPolicy_data();
-    void setKeepPolicy();
-    void cookiesChanged_data();
-    void cookiesChanged();
-    void isOnDomainList_data();
-    void isOnDomainList();
+  void acceptPolicy_data();
+  void acceptPolicy();
+  void allowedCookies_data();
+  void allowedCookies();
+  void allowForSessionCookies_data();
+  void allowForSessionCookies();
+  void blockedCookies_data();
+  void blockedCookies();
+  void clear_data();
+  void clear();
+  void cookiesForUrl_data();
+  void cookiesForUrl();
+  void keepPolicy_data();
+  void keepPolicy();
+  void loadSettings_data();
+  void loadSettings();
+  void setAcceptPolicy_data();
+  void setAcceptPolicy();
+  void setAllowedCookies_data();
+  void setAllowedCookies();
+  void setAllowForSessionCookies_data();
+  void setAllowForSessionCookies();
+  void setBlockedCookies_data();
+  void setBlockedCookies();
+  void setCookiesFromUrl_data();
+  void setCookiesFromUrl();
+  void setKeepPolicy_data();
+  void setKeepPolicy();
+  void cookiesChanged_data();
+  void cookiesChanged();
+  void isOnDomainList_data();
+  void isOnDomainList();
 };
 
 // Subclass that exposes the protected functions.
-class SubCookieJar : public CookieJar
-{
+class SubCookieJar : public CookieJar {
 public:
-    void call_cookiesChanged()
-        { return SubCookieJar::cookiesChanged(); }
+  void call_cookiesChanged() { return SubCookieJar::cookiesChanged(); }
 
-    static bool call_isOnDomainList(QStringList const &list, QString const &domain)
-        { return SubCookieJar::isOnDomainList(list, domain); }
+  static bool call_isOnDomainList(QStringList const &list,
+                                  QString const &domain) {
+    return SubCookieJar::isOnDomainList(list, domain);
+  }
 };
 
 // This will be called before the first test function is executed.
 // It is only called once.
-void tst_CookieJar::initTestCase()
-{
-}
+void tst_CookieJar::initTestCase() {}
 
 // This will be called after the last test function is executed.
 // It is only called once.
-void tst_CookieJar::cleanupTestCase()
-{
-}
+void tst_CookieJar::cleanupTestCase() {}
 
 // This will be called before each test function is executed.
-void tst_CookieJar::init()
-{
-}
+void tst_CookieJar::init() {}
 
 // This will be called after every test function.
-void tst_CookieJar::cleanup()
-{
-}
+void tst_CookieJar::cleanup() {}
 
-void tst_CookieJar::cookiejar_data()
-{
-}
+void tst_CookieJar::cookiejar_data() {}
 
-void tst_CookieJar::cookiejar()
-{
-    SubCookieJar jar;
+void tst_CookieJar::cookiejar() {
+  SubCookieJar jar;
 #if 0
     QCOMPARE(jar.acceptPolicy(), CookieJar::AcceptPolicy);
     QCOMPARE(jar.allowedCookies(), QStringList);
@@ -126,12 +114,11 @@ void tst_CookieJar::cookiejar()
     jar.call_cookiesChanged();
     QCOMPARE(jar.call_isOnDomainList(QStringList(), QString()), false);
 #endif
-    QSKIP("Test is not implemented.", SkipAll);
+  QSKIP("Test is not implemented.");
 }
 
 Q_DECLARE_METATYPE(CookieJar::AcceptPolicy)
-void tst_CookieJar::acceptPolicy_data()
-{
+void tst_CookieJar::acceptPolicy_data() {
 #if 0
     QTest::addColumn<CookieJar::AcceptPolicy>("acceptPolicy");
     QTest::newRow("null") << CookieJar::AcceptPolicy();
@@ -139,8 +126,7 @@ void tst_CookieJar::acceptPolicy_data()
 }
 
 // public CookieJar::AcceptPolicy acceptPolicy() const
-void tst_CookieJar::acceptPolicy()
-{
+void tst_CookieJar::acceptPolicy() {
 #if 0
     QFETCH(CookieJar::AcceptPolicy, acceptPolicy);
 
@@ -152,11 +138,10 @@ void tst_CookieJar::acceptPolicy()
 
     QCOMPARE(spy0.count(), 0);
 #endif
-    QSKIP("Test is not implemented.", SkipAll);
+  QSKIP("Test is not implemented.");
 }
 
-void tst_CookieJar::allowedCookies_data()
-{
+void tst_CookieJar::allowedCookies_data() {
 #if 0
     QTest::addColumn<QStringList>("allowedCookies");
     QTest::newRow("null") << QStringList();
@@ -164,8 +149,7 @@ void tst_CookieJar::allowedCookies_data()
 }
 
 // public QStringList allowedCookies() const
-void tst_CookieJar::allowedCookies()
-{
+void tst_CookieJar::allowedCookies() {
 #if 0
     QFETCH(QStringList, allowedCookies);
 
@@ -177,11 +161,10 @@ void tst_CookieJar::allowedCookies()
 
     QCOMPARE(spy0.count(), 0);
 #endif
-    QSKIP("Test is not implemented.", SkipAll);
+  QSKIP("Test is not implemented.");
 }
 
-void tst_CookieJar::allowForSessionCookies_data()
-{
+void tst_CookieJar::allowForSessionCookies_data() {
 #if 0
     QTest::addColumn<QStringList>("allowForSessionCookies");
     QTest::newRow("null") << QStringList();
@@ -189,8 +172,7 @@ void tst_CookieJar::allowForSessionCookies_data()
 }
 
 // public QStringList allowForSessionCookies() const
-void tst_CookieJar::allowForSessionCookies()
-{
+void tst_CookieJar::allowForSessionCookies() {
 #if 0
     QFETCH(QStringList, allowForSessionCookies);
 
@@ -202,11 +184,10 @@ void tst_CookieJar::allowForSessionCookies()
 
     QCOMPARE(spy0.count(), 0);
 #endif
-    QSKIP("Test is not implemented.", SkipAll);
+  QSKIP("Test is not implemented.");
 }
 
-void tst_CookieJar::blockedCookies_data()
-{
+void tst_CookieJar::blockedCookies_data() {
 #if 0
     QTest::addColumn<QStringList>("blockedCookies");
     QTest::newRow("null") << QStringList();
@@ -214,8 +195,7 @@ void tst_CookieJar::blockedCookies_data()
 }
 
 // public QStringList blockedCookies() const
-void tst_CookieJar::blockedCookies()
-{
+void tst_CookieJar::blockedCookies() {
 #if 0
     QFETCH(QStringList, blockedCookies);
 
@@ -227,19 +207,17 @@ void tst_CookieJar::blockedCookies()
 
     QCOMPARE(spy0.count(), 0);
 #endif
-    QSKIP("Test is not implemented.", SkipAll);
+  QSKIP("Test is not implemented.");
 }
 
-void tst_CookieJar::clear_data()
-{
-    QTest::addColumn<int>("foo");
-    QTest::newRow("0") << 0;
-    QTest::newRow("-1") << -1;
+void tst_CookieJar::clear_data() {
+  QTest::addColumn<int>("foo");
+  QTest::newRow("0") << 0;
+  QTest::newRow("-1") << -1;
 }
 
 // public void clear()
-void tst_CookieJar::clear()
-{
+void tst_CookieJar::clear() {
 #if 0
     QFETCH(int, foo);
 
@@ -251,11 +229,10 @@ void tst_CookieJar::clear()
 
     QCOMPARE(spy0.count(), 0);
 #endif
-    QSKIP("Test is not implemented.", SkipAll);
+  QSKIP("Test is not implemented.");
 }
 
-void tst_CookieJar::cookiesForUrl_data()
-{
+void tst_CookieJar::cookiesForUrl_data() {
 #if 0
     QTest::addColumn<QUrl>("url");
     QTest::addColumn<QList<QNetworkCookie>>("cookiesForUrl");
@@ -264,8 +241,7 @@ void tst_CookieJar::cookiesForUrl_data()
 }
 
 // public QList<QNetworkCookie> cookiesForUrl(QUrl const &url) const
-void tst_CookieJar::cookiesForUrl()
-{
+void tst_CookieJar::cookiesForUrl() {
 #if 0
     QFETCH(QUrl, url);
     QFETCH(QList<QNetworkCookie>, cookiesForUrl);
@@ -278,12 +254,11 @@ void tst_CookieJar::cookiesForUrl()
 
     QCOMPARE(spy0.count(), 0);
 #endif
-    QSKIP("Test is not implemented.", SkipAll);
+  QSKIP("Test is not implemented.");
 }
 
 Q_DECLARE_METATYPE(CookieJar::KeepPolicy)
-void tst_CookieJar::keepPolicy_data()
-{
+void tst_CookieJar::keepPolicy_data() {
 #if 0
     QTest::addColumn<CookieJar::KeepPolicy>("keepPolicy");
     QTest::newRow("null") << CookieJar::KeepPolicy();
@@ -291,8 +266,7 @@ void tst_CookieJar::keepPolicy_data()
 }
 
 // public CookieJar::KeepPolicy keepPolicy() const
-void tst_CookieJar::keepPolicy()
-{
+void tst_CookieJar::keepPolicy() {
 #if 0
     QFETCH(CookieJar::KeepPolicy, keepPolicy);
 
@@ -304,19 +278,17 @@ void tst_CookieJar::keepPolicy()
 
     QCOMPARE(spy0.count(), 0);
 #endif
-    QSKIP("Test is not implemented.", SkipAll);
+  QSKIP("Test is not implemented.");
 }
 
-void tst_CookieJar::loadSettings_data()
-{
-    QTest::addColumn<int>("foo");
-    QTest::newRow("0") << 0;
-    QTest::newRow("-1") << -1;
+void tst_CookieJar::loadSettings_data() {
+  QTest::addColumn<int>("foo");
+  QTest::newRow("0") << 0;
+  QTest::newRow("-1") << -1;
 }
 
 // public void loadSettings()
-void tst_CookieJar::loadSettings()
-{
+void tst_CookieJar::loadSettings() {
 #if 0
     QFETCH(int, foo);
 
@@ -328,11 +300,10 @@ void tst_CookieJar::loadSettings()
 
     QCOMPARE(spy0.count(), 0);
 #endif
-    QSKIP("Test is not implemented.", SkipAll);
+  QSKIP("Test is not implemented.");
 }
 
-void tst_CookieJar::setAcceptPolicy_data()
-{
+void tst_CookieJar::setAcceptPolicy_data() {
 #if 0
     QTest::addColumn<CookieJar::AcceptPolicy>("policy");
     QTest::newRow("null") << CookieJar::AcceptPolicy();
@@ -340,8 +311,7 @@ void tst_CookieJar::setAcceptPolicy_data()
 }
 
 // public void setAcceptPolicy(CookieJar::AcceptPolicy policy)
-void tst_CookieJar::setAcceptPolicy()
-{
+void tst_CookieJar::setAcceptPolicy() {
 #if 0
     QFETCH(CookieJar::AcceptPolicy, policy);
 
@@ -353,11 +323,10 @@ void tst_CookieJar::setAcceptPolicy()
 
     QCOMPARE(spy0.count(), 0);
 #endif
-    QSKIP("Test is not implemented.", SkipAll);
+  QSKIP("Test is not implemented.");
 }
 
-void tst_CookieJar::setAllowedCookies_data()
-{
+void tst_CookieJar::setAllowedCookies_data() {
 #if 0
     QTest::addColumn<QStringList>("list");
     QTest::newRow("null") << QStringList();
@@ -365,8 +334,7 @@ void tst_CookieJar::setAllowedCookies_data()
 }
 
 // public void setAllowedCookies(QStringList const &list)
-void tst_CookieJar::setAllowedCookies()
-{
+void tst_CookieJar::setAllowedCookies() {
 #if 0
     QFETCH(QStringList, list);
 
@@ -378,11 +346,10 @@ void tst_CookieJar::setAllowedCookies()
 
     QCOMPARE(spy0.count(), 0);
 #endif
-    QSKIP("Test is not implemented.", SkipAll);
+  QSKIP("Test is not implemented.");
 }
 
-void tst_CookieJar::setAllowForSessionCookies_data()
-{
+void tst_CookieJar::setAllowForSessionCookies_data() {
 #if 0
     QTest::addColumn<QStringList>("list");
     QTest::newRow("null") << QStringList();
@@ -390,8 +357,7 @@ void tst_CookieJar::setAllowForSessionCookies_data()
 }
 
 // public void setAllowForSessionCookies(QStringList const &list)
-void tst_CookieJar::setAllowForSessionCookies()
-{
+void tst_CookieJar::setAllowForSessionCookies() {
 #if 0
     QFETCH(QStringList, list);
 
@@ -403,11 +369,10 @@ void tst_CookieJar::setAllowForSessionCookies()
 
     QCOMPARE(spy0.count(), 0);
 #endif
-    QSKIP("Test is not implemented.", SkipAll);
+  QSKIP("Test is not implemented.");
 }
 
-void tst_CookieJar::setBlockedCookies_data()
-{
+void tst_CookieJar::setBlockedCookies_data() {
 #if 0
     QTest::addColumn<QStringList>("list");
     QTest::newRow("null") << QStringList();
@@ -415,8 +380,7 @@ void tst_CookieJar::setBlockedCookies_data()
 }
 
 // public void setBlockedCookies(QStringList const &list)
-void tst_CookieJar::setBlockedCookies()
-{
+void tst_CookieJar::setBlockedCookies() {
 #if 0
     QFETCH(QStringList, list);
 
@@ -428,11 +392,10 @@ void tst_CookieJar::setBlockedCookies()
 
     QCOMPARE(spy0.count(), 0);
 #endif
-    QSKIP("Test is not implemented.", SkipAll);
+  QSKIP("Test is not implemented.");
 }
 
-void tst_CookieJar::setCookiesFromUrl_data()
-{
+void tst_CookieJar::setCookiesFromUrl_data() {
 #if 0
     QTest::addColumn<QList<QNetworkCookie>>("cookieList");
     QTest::addColumn<QUrl>("url");
@@ -441,9 +404,9 @@ void tst_CookieJar::setCookiesFromUrl_data()
 #endif
 }
 
-// public bool setCookiesFromUrl(QList<QNetworkCookie> const &cookieList, QUrl const &url)
-void tst_CookieJar::setCookiesFromUrl()
-{
+// public bool setCookiesFromUrl(QList<QNetworkCookie> const &cookieList, QUrl
+// const &url)
+void tst_CookieJar::setCookiesFromUrl() {
 #if 0
     QFETCH(QList<QNetworkCookie>, cookieList);
     QFETCH(QUrl, url);
@@ -457,11 +420,10 @@ void tst_CookieJar::setCookiesFromUrl()
 
     QCOMPARE(spy0.count(), 0);
 #endif
-    QSKIP("Test is not implemented.", SkipAll);
+  QSKIP("Test is not implemented.");
 }
 
-void tst_CookieJar::setKeepPolicy_data()
-{
+void tst_CookieJar::setKeepPolicy_data() {
 #if 0
     QTest::addColumn<CookieJar::KeepPolicy>("policy");
     QTest::newRow("null") << CookieJar::KeepPolicy();
@@ -469,8 +431,7 @@ void tst_CookieJar::setKeepPolicy_data()
 }
 
 // public void setKeepPolicy(CookieJar::KeepPolicy policy)
-void tst_CookieJar::setKeepPolicy()
-{
+void tst_CookieJar::setKeepPolicy() {
 #if 0
     QFETCH(CookieJar::KeepPolicy, policy);
 
@@ -482,19 +443,17 @@ void tst_CookieJar::setKeepPolicy()
 
     QCOMPARE(spy0.count(), 0);
 #endif
-    QSKIP("Test is not implemented.", SkipAll);
+  QSKIP("Test is not implemented.");
 }
 
-void tst_CookieJar::cookiesChanged_data()
-{
-    QTest::addColumn<int>("foo");
-    QTest::newRow("0") << 0;
-    QTest::newRow("-1") << -1;
+void tst_CookieJar::cookiesChanged_data() {
+  QTest::addColumn<int>("foo");
+  QTest::newRow("0") << 0;
+  QTest::newRow("-1") << -1;
 }
 
 // protected void cookiesChanged()
-void tst_CookieJar::cookiesChanged()
-{
+void tst_CookieJar::cookiesChanged() {
 #if 0
     QFETCH(int, foo);
 
@@ -506,51 +465,59 @@ void tst_CookieJar::cookiesChanged()
 
     QCOMPARE(spy0.count(), 0);
 #endif
-    QSKIP("Test is not implemented.", SkipAll);
+  QSKIP("Test is not implemented.");
 }
 
-void tst_CookieJar::isOnDomainList_data()
-{
-    QTest::addColumn<QStringList>("list");
-    QTest::addColumn<QString>("domain");
-    QTest::addColumn<bool>("isOnDomainList");
+void tst_CookieJar::isOnDomainList_data() {
+  QTest::addColumn<QStringList>("list");
+  QTest::addColumn<QString>("domain");
+  QTest::addColumn<bool>("isOnDomainList");
 
-    QTest::newRow("null") << QStringList() << QString() << false;
-    QTest::newRow("exact-match") << (QStringList() << "foo.com") << "foo.com" << true;
+  QTest::newRow("null") << QStringList() << QString() << false;
+  QTest::newRow("exact-match")
+      << (QStringList() << "foo.com") << "foo.com" << true;
 
-    QTest::newRow("check-0") << (QStringList() << "foo.com") << "foo.com" << true;
-    QTest::newRow("check-1") << (QStringList() << "foo.com") << ".foo.com" << true;
-    QTest::newRow("check-2") << (QStringList() << ".foo.com") << "foo.com" << true;
-    QTest::newRow("check-3") << (QStringList() << ".foo.com") << ".foo.com" << true;
-    QTest::newRow("check-4") << (QStringList() << "foo.com") << "abcfoo.com" << false;
-    QTest::newRow("check-5") << (QStringList() << "foo.com") << "abc.foo.com" << true;
-    QTest::newRow("check-6") << (QStringList() << ".foo.com") << "abcfoo.com" << false;
-    QTest::newRow("check-7") << (QStringList() << ".foo.com") << "abc.foo.com" << true;
+  QTest::newRow("check-0") << (QStringList() << "foo.com") << "foo.com" << true;
+  QTest::newRow("check-1") << (QStringList() << "foo.com") << ".foo.com"
+                           << true;
+  QTest::newRow("check-2") << (QStringList() << ".foo.com") << "foo.com"
+                           << true;
+  QTest::newRow("check-3") << (QStringList() << ".foo.com") << ".foo.com"
+                           << true;
+  QTest::newRow("check-4") << (QStringList() << "foo.com") << "abcfoo.com"
+                           << false;
+  QTest::newRow("check-5") << (QStringList() << "foo.com") << "abc.foo.com"
+                           << true;
+  QTest::newRow("check-6") << (QStringList() << ".foo.com") << "abcfoo.com"
+                           << false;
+  QTest::newRow("check-7") << (QStringList() << ".foo.com") << "abc.foo.com"
+                           << true;
 
-    QTest::newRow("check-4") << (QStringList() << "abc.foo.com") << "foo.com" << false;
-    QTest::newRow("check-5") << (QStringList() << "abc.foo.com") << ".foo.com" << false;
+  QTest::newRow("check-4") << (QStringList() << "abc.foo.com") << "foo.com"
+                           << false;
+  QTest::newRow("check-5") << (QStringList() << "abc.foo.com") << ".foo.com"
+                           << false;
 
-
-    QTest::newRow("edgecheck-0") << (QStringList() << "") << ".foo.com" << false;
-    QTest::newRow("edgecheck-1") << (QStringList() << "") << "foo.com" << false;
-    QTest::newRow("edgecheck-2") << (QStringList() << ".") << ".foo.com" << false;
-    QTest::newRow("edgecheck-3") << (QStringList() << ".") << "foo.com" << false;
-    QTest::newRow("edgecheck-4") << (QStringList() << "abc.foo.com") << "" << false;
-    QTest::newRow("edgecheck-5") << (QStringList() << "a") << "ab" << false;
+  QTest::newRow("edgecheck-0") << (QStringList() << "") << ".foo.com" << false;
+  QTest::newRow("edgecheck-1") << (QStringList() << "") << "foo.com" << false;
+  QTest::newRow("edgecheck-2") << (QStringList() << ".") << ".foo.com" << false;
+  QTest::newRow("edgecheck-3") << (QStringList() << ".") << "foo.com" << false;
+  QTest::newRow("edgecheck-4")
+      << (QStringList() << "abc.foo.com") << "" << false;
+  QTest::newRow("edgecheck-5") << (QStringList() << "a") << "ab" << false;
 }
 
-// protected static bool isOnDomainList(QStringList const &list, QString const &domain)
-void tst_CookieJar::isOnDomainList()
-{
-    QFETCH(QStringList, list);
-    QFETCH(QString, domain);
-    QFETCH(bool, isOnDomainList);
+// protected static bool isOnDomainList(QStringList const &list, QString const
+// &domain)
+void tst_CookieJar::isOnDomainList() {
+  QFETCH(QStringList, list);
+  QFETCH(QString, domain);
+  QFETCH(bool, isOnDomainList);
 
-    SubCookieJar jar;
+  SubCookieJar jar;
 
-    QCOMPARE(jar.call_isOnDomainList(list, domain), isOnDomainList);
+  QCOMPARE(jar.call_isOnDomainList(list, domain), isOnDomainList);
 }
 
 QTEST_MAIN(tst_CookieJar)
 #include "tst_cookiejar.moc"
-

@@ -19,6 +19,8 @@
 
 #include "locationbarsiteicon.h"
 
+#include <QDrag>
+#include <QMimeData>
 #include <qevent.h>
 #include <qurl.h>
 
@@ -26,57 +28,51 @@
 #include "webview.h"
 
 LocationBarSiteIcon::LocationBarSiteIcon(QWidget *parent)
-    : QLabel(parent)
-    , m_webView(0)
-{
-    resize(QSize(16, 16));
-    webViewSiteIconChanged();
-    setCursor(Qt::ArrowCursor);
-    show();
+    : QLabel(parent), m_webView(0) {
+  resize(QSize(16, 16));
+  webViewSiteIconChanged();
+  setCursor(Qt::ArrowCursor);
+  show();
 }
 
-void LocationBarSiteIcon::setWebView(WebView *webView)
-{
-    m_webView = webView;
-    connect(webView, SIGNAL(loadFinished(bool)),
-            this, SLOT(webViewSiteIconChanged()));
-    connect(webView, SIGNAL(iconChanged()),
-            this, SLOT(webViewSiteIconChanged()));
+void LocationBarSiteIcon::setWebView(WebView *webView) {
+  m_webView = webView;
+  connect(webView, SIGNAL(loadFinished(bool)), this,
+          SLOT(webViewSiteIconChanged()));
+  connect(webView, SIGNAL(iconChanged()), this, SLOT(webViewSiteIconChanged()));
 }
 
-void LocationBarSiteIcon::webViewSiteIconChanged()
-{
-    QUrl url;
-    if (m_webView)
-        url = m_webView->url();
-    setPixmap(BrowserApplication::instance()->icon(url).pixmap(16, 16));
+void LocationBarSiteIcon::webViewSiteIconChanged() {
+  QUrl url;
+  if (m_webView)
+    url = m_webView->url();
+  setPixmap(BrowserApplication::instance()->icon(url).pixmap(16, 16));
 }
 
-void LocationBarSiteIcon::mousePressEvent(QMouseEvent *event)
-{
-    if (event->button() == Qt::LeftButton)
-        m_dragStartPos = event->pos();
-    QLabel::mousePressEvent(event);
+void LocationBarSiteIcon::mousePressEvent(QMouseEvent *event) {
+  if (event->button() == Qt::LeftButton)
+    m_dragStartPos = event->pos();
+  QLabel::mousePressEvent(event);
 }
 
-void LocationBarSiteIcon::mouseMoveEvent(QMouseEvent *event)
-{
-    if (event->buttons() == Qt::LeftButton
-        && (event->pos() - m_dragStartPos).manhattanLength() > QApplication::startDragDistance()
-        && m_webView) {
-        QDrag *drag = new QDrag(this);
-        QMimeData *mimeData = new QMimeData;
-        QString title = m_webView->title();
-        if (title.isEmpty())
-            title = QString::fromUtf8(m_webView->url().toEncoded());
-        mimeData->setText(title);
-        QList<QUrl> urls;
-        urls.append(m_webView->url());
-        mimeData->setUrls(urls);
-        const QPixmap *p = pixmap();
-        if (p)
-            drag->setPixmap(*p);
-        drag->setMimeData(mimeData);
-        drag->exec();
-    }
+void LocationBarSiteIcon::mouseMoveEvent(QMouseEvent *event) {
+  if (event->buttons() == Qt::LeftButton &&
+      (event->pos() - m_dragStartPos).manhattanLength() >
+          QApplication::startDragDistance() &&
+      m_webView) {
+    QDrag *drag = new QDrag(this);
+    QMimeData *mimeData = new QMimeData;
+    QString title = m_webView->title();
+    if (title.isEmpty())
+      title = QString::fromUtf8(m_webView->url().toEncoded());
+    mimeData->setText(title);
+    QList<QUrl> urls;
+    urls.append(m_webView->url());
+    mimeData->setUrls(urls);
+    const QPixmap *p = pixmap();
+    if (p)
+      drag->setPixmap(*p);
+    drag->setMimeData(mimeData);
+    drag->exec();
+  }
 }

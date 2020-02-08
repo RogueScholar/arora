@@ -18,77 +18,81 @@
  * Boston, MA  02110-1301  USA
  */
 
+#include <QSqlDatabase>
 #include <qdatetime.h>
 #include <qdebug.h>
 #include <qdir.h>
 #include <qfile.h>
-#include <qsqldatabase.h>
 #include <qsqlerror.h>
 #include <qsqlquery.h>
 #include <qtextstream.h>
 #include <qvariant.h>
 
-#include "singleapplication.h"
 #include "historymanager.h"
+#include "singleapplication.h"
 
-static HistoryEntry formatEntry(QByteArray url, QByteArray title, qlonglong prdate)
-{
-    QDateTime dateTime = QDateTime::fromTime_t(prdate / 1000000);
-    dateTime.addMSecs((prdate % 1000000) / 1000);
-    HistoryEntry entry(url, dateTime, title);
-    return entry;
+static HistoryEntry formatEntry(QByteArray url, QByteArray title,
+                                qlonglong prdate) {
+  QDateTime dateTime = QDateTime::fromTime_t(prdate / 1000000);
+  dateTime.addMSecs((prdate % 1000000) / 1000);
+  HistoryEntry entry(url, dateTime, title);
+  return entry;
 }
 
-int main(int argc, char **argv)
-{
-    SingleApplication application(argc, argv);
-    QCoreApplication::setOrganizationDomain(QLatin1String("arora-browser.org"));
-    QCoreApplication::setApplicationName(QLatin1String("Arora"));
+int main(int argc, char **argv) {
+  SingleApplication application(argc, argv);
+  QCoreApplication::setOrganizationDomain(QLatin1String("arora-browser.org"));
+  QCoreApplication::setApplicationName(QLatin1String("Arora"));
 
-    if (application.sendMessage(QByteArray())) {
-        qWarning() << "To prevent the loss of any history please exit Arora while this is tool is being run";
-        return 1;
-    }
+  if (application.sendMessage(QByteArray())) {
+    qWarning() << "To prevent the loss of any history please exit Arora while "
+                  "this is tool is being run";
+    return 1;
+  }
 
-    QStringList args = application.arguments();
-    args.takeFirst();
-    if (args.isEmpty()) {
-        QTextStream stream(stdout);
-        stream << "arora-placesimport is a tool for importing browser history from Firefox 3 and up" << endl;
-        stream << "arora-placesinfo ~/.mozilla/firefox/[profile-dir]/places.sqlite" << endl;
-        return 0;
-    }
-
-    QSqlDatabase placesDatabase = QSqlDatabase::addDatabase("QSQLITE");
-    placesDatabase.setDatabaseName(args.first());
-
-    if (!placesDatabase.open()) {
-        qWarning("Unable to open database: %s", qPrintable(placesDatabase.lastError().text()));
-        return 1;
-    }
-
-    QSqlQuery historyQuery(
-        "SELECT moz_places.url, moz_places.title, moz_historyvisits.visit_date "
-        "FROM moz_places, moz_historyvisits "
-        "WHERE moz_places.id = moz_historyvisits.place_id;");
-    historyQuery.setForwardOnly(true);
-
-    if (!historyQuery.exec()) {
-        qWarning("Unable to extract history: %s.  Is Firefox running?", qPrintable(historyQuery.lastError().text()));
-        return 1;
-    }
-
-    HistoryManager manager;
-    QList<HistoryEntry> history = manager.history();
-    while (historyQuery.next()) {
-        QByteArray url = historyQuery.value(0).toByteArray();
-        QByteArray title = historyQuery.value(1).toByteArray();
-        qlonglong prdate = historyQuery.value(2).toLongLong();
-        HistoryEntry entry = formatEntry(url, title, prdate);
-        history.append(entry);
-    }
-    manager.setHistory(history);
-
+  QStringList args = application.arguments();
+  args.takeFirst();
+  if (args.isEmpty()) {
+    QTextStream stream(stdout);
+    stream << "arora-placesimport is a tool for importing browser history from "
+              "Firefox 3 and up"
+           << endl;
+    stream << "arora-placesinfo ~/.mozilla/firefox/[profile-dir]/places.sqlite"
+           << endl;
     return 0;
-}
+  }
 
+  QSqlDatabase placesDatabase = QSqlDatabase::addDatabase("QSQLITE");
+  placesDatabase.setDatabaseName(args.first());
+
+  if (!placesDatabase.open()) {
+    qWarning("Unable to open database: %s",
+             qPrintable(placesDatabase.lastError().text()));
+    return 1;
+  }
+
+  QSqlQuery historyQuery(
+      "SELECT moz_places.url, moz_places.title, moz_historyvisits.visit_date "
+      "FROM moz_places, moz_historyvisits "
+      "WHERE moz_places.id = moz_historyvisits.place_id;");
+  historyQuery.setForwardOnly(true);
+
+  if (!historyQuery.exec()) {
+    qWarning("Unable to extract history: %s.  Is Firefox running?",
+             qPrintable(historyQuery.lastError().text()));
+    return 1;
+  }
+
+  HistoryManager manager;
+  QList<HistoryEntry> history = manager.history();
+  while (historyQuery.next()) {
+    QByteArray url = historyQuery.value(0).toByteArray();
+    QByteArray title = historyQuery.value(1).toByteArray();
+    qlonglong prdate = historyQuery.value(2).toLongLong();
+    HistoryEntry entry = formatEntry(url, title, prdate);
+    history.append(entry);
+  }
+  manager.setHistory(history);
+
+  return 0;
+}

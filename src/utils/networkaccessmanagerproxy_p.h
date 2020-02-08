@@ -29,25 +29,27 @@
 #ifndef NETWORKACCESSMANAGERPROXY_P_H
 #define NETWORKACCESSMANAGERPROXY_P_H
 
-#include <qnetworkcookie.h>
+#include <QNetworkCookie>
+#include <QNetworkCookieJar>
 
 #include "networkaccessmanagerproxy.h"
 
-class NetworkCookieJarProxy : public QNetworkCookieJar
-{
-    Q_OBJECT
+class NetworkCookieJarProxy : public QNetworkCookieJar {
+  Q_OBJECT
 
 public:
-    NetworkCookieJarProxy(QObject *parent = 0)
-        : QNetworkCookieJar(parent) { }
+  NetworkCookieJarProxy(QObject *parent = 0) : QNetworkCookieJar(parent) {}
 
-    inline QList<QNetworkCookie> cookiesForUrl(const QUrl &url) const
-        { return NetworkAccessManagerProxy::m_primaryManager->cookieJar()->cookiesForUrl(url); }
+  inline QList<QNetworkCookie> cookiesForUrl(const QUrl &url) const {
+    return NetworkAccessManagerProxy::m_primaryManager->cookieJar()
+        ->cookiesForUrl(url);
+  }
 
-    inline bool setCookiesFromUrl(const QList<QNetworkCookie> &cookieList, const QUrl &url)
-        { return NetworkAccessManagerProxy::m_primaryManager->cookieJar()->setCookiesFromUrl(cookieList, url); }
-
+  inline bool setCookiesFromUrl(const QList<QNetworkCookie> &cookieList,
+                                const QUrl &url) {
+    return NetworkAccessManagerProxy::m_primaryManager->cookieJar()
+        ->setCookiesFromUrl(cookieList, url);
+  }
 };
 
 #endif // NETWORKACCESSMANAGERPROXY_P_H
-

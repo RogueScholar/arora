@@ -26,213 +26,189 @@
  * SUCH DAMAGE.
  */
 
-#include <qtest.h>
-#include <qsignalspy.h>
 #include <qtry.h>
 
 #include "adblockdialog.h"
 #include "adblockmanager.h"
 #include "adblocksubscription.h"
 
+#include <QSignalSpy>
+#include <QTest>
+#include <QUrl>
 #include <qdebug.h>
 
-class tst_AdBlockManager : public QObject
-{
-    Q_OBJECT
+class tst_AdBlockManager : public QObject {
+  Q_OBJECT
 
 public slots:
-    void initTestCase();
-    void cleanupTestCase();
-    void init();
-    void cleanup();
+  void initTestCase();
+  void cleanupTestCase();
+  void init();
+  void cleanup();
 
 private slots:
-    void adblockmanager_data();
-    void adblockmanager();
+  void adblockmanager_data();
+  void adblockmanager();
 
-    void addSubscription();
-    void customRules();
-    void isEnabled_data();
-    void isEnabled();
-    void load();
-    void removeSubscription();
-    void showDialog();
-    void rulesChanged();
+  void addSubscription();
+  void customRules();
+  void isEnabled_data();
+  void isEnabled();
+  void load();
+  void removeSubscription();
+  void showDialog();
+  void rulesChanged();
 };
 
 // Subclass that exposes the protected functions.
-class SubAdBlockManager : public AdBlockManager
-{
+class SubAdBlockManager : public AdBlockManager {
 public:
-    ~SubAdBlockManager() {
-        QList<AdBlockSubscription*> list = subscriptions();
-        foreach (AdBlockSubscription *s, list)
-            removeSubscription(s);
-        setEnabled(false);
-    }
+  ~SubAdBlockManager() {
+    QList<AdBlockSubscription *> list = subscriptions();
+    foreach (AdBlockSubscription *s, list)
+      removeSubscription(s);
+    setEnabled(false);
+  }
 
-    void call_rulesChanged()
-        { return SubAdBlockManager::rulesChanged(); }
+  void call_rulesChanged() { return SubAdBlockManager::rulesChanged(); }
 };
 
 // This will be called before the first test function is executed.
 // It is only called once.
-void tst_AdBlockManager::initTestCase()
-{
-}
+void tst_AdBlockManager::initTestCase() {}
 
 // This will be called after the last test function is executed.
 // It is only called once.
-void tst_AdBlockManager::cleanupTestCase()
-{
-}
+void tst_AdBlockManager::cleanupTestCase() {}
 
 // This will be called before each test function is executed.
-void tst_AdBlockManager::init()
-{
-}
+void tst_AdBlockManager::init() {}
 
 // This will be called after every test function.
-void tst_AdBlockManager::cleanup()
-{
-}
+void tst_AdBlockManager::cleanup() {}
 
-void tst_AdBlockManager::adblockmanager_data()
-{
-}
+void tst_AdBlockManager::adblockmanager_data() {}
 
-void tst_AdBlockManager::adblockmanager()
-{
-    SubAdBlockManager manager;
-    manager.addSubscription((AdBlockSubscription*)0);
-    QVERIFY(manager.customRules());
-    QVERIFY(manager.instance() != (AdBlockManager*)0);
-    QCOMPARE(manager.isEnabled(), true);
-    manager.load();
-    QVERIFY(manager.network());
-    QVERIFY(manager.page());
-    manager.removeSubscription((AdBlockSubscription*)0);
-    manager.setEnabled(false);
-    QVERIFY(manager.showDialog());
-    QList<AdBlockSubscription*> list;
-    list.append(manager.customRules());
-    QCOMPARE(manager.subscriptions(), list);
+void tst_AdBlockManager::adblockmanager() {
+  SubAdBlockManager manager;
+  manager.addSubscription((AdBlockSubscription *)0);
+  QVERIFY(manager.customRules());
+  QVERIFY(manager.instance() != (AdBlockManager *)0);
+  QCOMPARE(manager.isEnabled(), true);
+  manager.load();
+  QVERIFY(manager.network());
+  QVERIFY(manager.page());
+  manager.removeSubscription((AdBlockSubscription *)0);
+  manager.setEnabled(false);
+  QVERIFY(manager.showDialog());
+  QList<AdBlockSubscription *> list;
+  list.append(manager.customRules());
+  QCOMPARE(manager.subscriptions(), list);
 }
 
 // public void addSubscription(AdBlockSubscription *subscription)
-void tst_AdBlockManager::addSubscription()
-{
-    SubAdBlockManager manager;
+void tst_AdBlockManager::addSubscription() {
+  SubAdBlockManager manager;
 
-    QList<AdBlockSubscription*> list = manager.subscriptions();
+  QList<AdBlockSubscription *> list = manager.subscriptions();
 
-    QSignalSpy spy0(&manager, SIGNAL(rulesChanged()));
+  QSignalSpy spy0(&manager, SIGNAL(rulesChanged()));
 
-    AdBlockSubscription *subscription = new AdBlockSubscription(QUrl(), &manager);
-    manager.addSubscription(subscription);
-    QCOMPARE(manager.subscriptions(), (list += subscription));
+  AdBlockSubscription *subscription = new AdBlockSubscription(QUrl(), &manager);
+  manager.addSubscription(subscription);
+  QCOMPARE(manager.subscriptions(), (list += subscription));
 
-    QCOMPARE(spy0.count(), 1);
+  QCOMPARE(spy0.count(), 1);
 }
 
 // public AdBlockSubscription *customRules()
-void tst_AdBlockManager::customRules()
-{
-    SubAdBlockManager manager;
-    QSignalSpy spy0(&manager, SIGNAL(rulesChanged()));
+void tst_AdBlockManager::customRules() {
+  SubAdBlockManager manager;
+  QSignalSpy spy0(&manager, SIGNAL(rulesChanged()));
 
-    AdBlockSubscription *subscription = manager.customRules();
-    QVERIFY(subscription);
-    QVERIFY(!subscription->title().isEmpty());
-    QVERIFY(subscription->allRules().isEmpty());
+  AdBlockSubscription *subscription = manager.customRules();
+  QVERIFY(subscription);
+  QVERIFY(!subscription->title().isEmpty());
+  QVERIFY(subscription->allRules().isEmpty());
 
-    QCOMPARE(spy0.count(), 1);
+  QCOMPARE(spy0.count(), 1);
 
-    subscription = manager.customRules();
-    QCOMPARE(spy0.count(), 1);
+  subscription = manager.customRules();
+  QCOMPARE(spy0.count(), 1);
 }
 
-void tst_AdBlockManager::isEnabled_data()
-{
-    QTest::addColumn<bool>("isEnabled");
-    QTest::newRow("true") << true;
-    QTest::newRow("false") << false;
+void tst_AdBlockManager::isEnabled_data() {
+  QTest::addColumn<bool>("isEnabled");
+  QTest::newRow("true") << true;
+  QTest::newRow("false") << false;
 }
 
 // public bool isEnabled() const
-void tst_AdBlockManager::isEnabled()
-{
-    QFETCH(bool, isEnabled);
+void tst_AdBlockManager::isEnabled() {
+  QFETCH(bool, isEnabled);
 
-    SubAdBlockManager manager;
+  SubAdBlockManager manager;
 
-    QSignalSpy spy0(&manager, SIGNAL(rulesChanged()));
+  QSignalSpy spy0(&manager, SIGNAL(rulesChanged()));
 
-    bool before = manager.isEnabled();
+  bool before = manager.isEnabled();
 
-    manager.setEnabled(isEnabled);
-    manager.setEnabled(isEnabled);
-    QCOMPARE(manager.isEnabled(), isEnabled);
+  manager.setEnabled(isEnabled);
+  manager.setEnabled(isEnabled);
+  QCOMPARE(manager.isEnabled(), isEnabled);
 
-    QCOMPARE(spy0.count(), before == isEnabled ? 0 : 1);
+  QCOMPARE(spy0.count(), before == isEnabled ? 0 : 1);
 }
 
 // public void load()
-void tst_AdBlockManager::load()
-{
-    SubAdBlockManager manager;
+void tst_AdBlockManager::load() {
+  SubAdBlockManager manager;
 
-    QSignalSpy spy0(&manager, SIGNAL(rulesChanged()));
+  QSignalSpy spy0(&manager, SIGNAL(rulesChanged()));
 
-    manager.load();
+  manager.load();
 
-    QCOMPARE(spy0.count(), 0);
+  QCOMPARE(spy0.count(), 0);
 }
 
 // public void removeSubscription(AdBlockSubscription *subscription)
-void tst_AdBlockManager::removeSubscription()
-{
-    SubAdBlockManager manager;
+void tst_AdBlockManager::removeSubscription() {
+  SubAdBlockManager manager;
 
-    QSignalSpy spy0(&manager, SIGNAL(rulesChanged()));
+  QSignalSpy spy0(&manager, SIGNAL(rulesChanged()));
 
-    QList<AdBlockSubscription*> list = manager.subscriptions();
-    AdBlockSubscription *subscription = new AdBlockSubscription(QUrl(), &manager);
-    manager.addSubscription(subscription);
-    manager.removeSubscription(subscription);
-    QCOMPARE(manager.subscriptions(), list);
+  QList<AdBlockSubscription *> list = manager.subscriptions();
+  AdBlockSubscription *subscription = new AdBlockSubscription(QUrl(), &manager);
+  manager.addSubscription(subscription);
+  manager.removeSubscription(subscription);
+  QCOMPARE(manager.subscriptions(), list);
 
-    QCOMPARE(spy0.count(), 2);
+  QCOMPARE(spy0.count(), 2);
 }
-
 
 // public AdBlockDialog *showDialog()
-void tst_AdBlockManager::showDialog()
-{
-    SubAdBlockManager manager;
+void tst_AdBlockManager::showDialog() {
+  SubAdBlockManager manager;
 
-    QSignalSpy spy0(&manager, SIGNAL(rulesChanged()));
+  QSignalSpy spy0(&manager, SIGNAL(rulesChanged()));
 
-    AdBlockDialog *dialog = manager.showDialog();
-    QVERIFY(dialog);
-    QTRY_VERIFY(dialog->isVisible());
+  AdBlockDialog *dialog = manager.showDialog();
+  QVERIFY(dialog);
+  QTRY_VERIFY(dialog->isVisible());
 }
 
-void tst_AdBlockManager::rulesChanged()
-{
-    SubAdBlockManager manager;
+void tst_AdBlockManager::rulesChanged() {
+  SubAdBlockManager manager;
 
-    QSignalSpy spy0(&manager, SIGNAL(rulesChanged()));
+  QSignalSpy spy0(&manager, SIGNAL(rulesChanged()));
 
+  AdBlockSubscription *subscription = new AdBlockSubscription(QUrl(), &manager);
+  manager.addSubscription(subscription);
+  subscription->setEnabled(true);
+  subscription->addRule(AdBlockRule());
 
-    AdBlockSubscription *subscription = new AdBlockSubscription(QUrl(), &manager);
-    manager.addSubscription(subscription);
-    subscription->setEnabled(true);
-    subscription->addRule(AdBlockRule());
-
-    QCOMPARE(spy0.count(), 3);
+  QCOMPARE(spy0.count(), 3);
 }
 
 QTEST_MAIN(tst_AdBlockManager)
 #include "tst_adblockmanager.moc"
-
