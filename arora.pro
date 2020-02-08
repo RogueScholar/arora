@@ -13,4 +13,3 @@ unix {
     doxygen.depends = Doxyfile
     QMAKE_EXTRA_TARGETS += doxygen
 }
-
