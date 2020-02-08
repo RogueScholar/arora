@@ -42,37 +42,41 @@
 
 #include <qwindowsvistastyle.h>
 
-class ExplorerStyle : public QWindowsVistaStyle
-{
+class ExplorerStyle : public QWindowsVistaStyle {
 public:
-    ExplorerStyle();
-    void drawPrimitive(PrimitiveElement element, const QStyleOption *option,
-                       QPainter *painter, const QWidget *widget = 0) const;
-    void drawControl(ControlElement element, const QStyleOption *option,
-                     QPainter *painter, const QWidget *widget) const;
-    void drawComplexControl(ComplexControl control, const QStyleOptionComplex *option,
-                            QPainter *painter, const QWidget *widget) const;
-    QSize sizeFromContents(ContentsType type, const QStyleOption *option,
-                           const QSize &size, const QWidget *widget) const;
-    QRect subElementRect(SubElement element, const QStyleOption *option, const QWidget *widget) const;
-    QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt,
-                         SubControl sc, const QWidget *widget) const;
-    SubControl hitTestComplexControl(ComplexControl control, const QStyleOptionComplex *option,
-                                     const QPoint &pos, const QWidget *widget = 0) const;
-    QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *opt,
-                           const QWidget *widget = 0) const;
-    int pixelMetric(PixelMetric metric, const QStyleOption *option = 0, const QWidget *widget = 0) const;
-    void polish(QWidget *widget);
-    void unpolish(QWidget *widget);
-    void polish(QPalette pal);
-    void polish(QApplication *app);
-    void unpolish(QApplication *app);
-    QPalette standardPalette();
+  ExplorerStyle();
+  void drawPrimitive(PrimitiveElement element, const QStyleOption *option,
+                     QPainter *painter, const QWidget *widget = 0) const;
+  void drawControl(ControlElement element, const QStyleOption *option,
+                   QPainter *painter, const QWidget *widget) const;
+  void drawComplexControl(ComplexControl control,
+                          const QStyleOptionComplex *option, QPainter *painter,
+                          const QWidget *widget) const;
+  QSize sizeFromContents(ContentsType type, const QStyleOption *option,
+                         const QSize &size, const QWidget *widget) const;
+  QRect subElementRect(SubElement element, const QStyleOption *option,
+                       const QWidget *widget) const;
+  QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt,
+                       SubControl sc, const QWidget *widget) const;
+  SubControl hitTestComplexControl(ComplexControl control,
+                                   const QStyleOptionComplex *option,
+                                   const QPoint &pos,
+                                   const QWidget *widget = 0) const;
+  QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *opt,
+                         const QWidget *widget = 0) const;
+  int pixelMetric(PixelMetric metric, const QStyleOption *option = 0,
+                  const QWidget *widget = 0) const;
+  void polish(QWidget *widget);
+  void unpolish(QWidget *widget);
+  void polish(QPalette pal);
+  void polish(QApplication *app);
+  void unpolish(QApplication *app);
+  QPalette standardPalette();
 
 private:
-    mutable QRect m_currentTopRect; //current toolbar top area size
-    mutable QRect m_currentBottomRect; //current toolbar top area size
+  mutable QRect m_currentTopRect;    // current toolbar top area size
+  mutable QRect m_currentBottomRect; // current toolbar top area size
 };
 #endif
 
-#endif //EXPLORERSTYLE_H
+#endif // EXPLORERSTYLE_H

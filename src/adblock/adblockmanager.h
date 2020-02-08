@@ -39,51 +39,48 @@ class AdBlockDialog;
 class AdBlockNetwork;
 class AdBlockPage;
 class AdBlockSubscription;
-class AdBlockManager : public QObject
-{
-    Q_OBJECT
+class AdBlockManager : public QObject {
+  Q_OBJECT
 
 signals:
-    void rulesGoingToChange();
-    void rulesChanged();
+  void rulesGoingToChange();
+  void rulesChanged();
 
 public:
-    AdBlockManager(QObject *parent = 0);
-    ~AdBlockManager();
+  AdBlockManager(QObject *parent = 0);
+  ~AdBlockManager();
 
-    void load();
+  void load();
 
-    static AdBlockManager *instance();
-    bool isEnabled() const;
+  static AdBlockManager *instance();
+  bool isEnabled() const;
 
-    QList<AdBlockSubscription*> subscriptions() const;
-    void removeSubscription(AdBlockSubscription *subscription);
-    void addSubscription(AdBlockSubscription *subscription);
+  QList<AdBlockSubscription *> subscriptions() const;
+  void removeSubscription(AdBlockSubscription *subscription);
+  void addSubscription(AdBlockSubscription *subscription);
 
-    AdBlockNetwork *network();
-    AdBlockPage *page();
-    AdBlockSubscription *customRules();
+  AdBlockNetwork *network();
+  AdBlockPage *page();
+  AdBlockSubscription *customRules();
 
 public slots:
-    void setEnabled(bool enabled);
-    AdBlockDialog *showDialog();
+  void setEnabled(bool enabled);
+  AdBlockDialog *showDialog();
 
 private slots:
-    void save();
+  void save();
 
 private:
-    static QUrl customSubscriptionUrl();
-    static AdBlockManager *s_adBlockManager;
+  static QUrl customSubscriptionUrl();
+  static AdBlockManager *s_adBlockManager;
 
-    bool m_loaded;
-    bool m_enabled;
-    AutoSaver *m_saveTimer;
-    QPointer<AdBlockDialog> m_adBlockDialog;
-    AdBlockNetwork *m_adBlockNetwork;
-    AdBlockPage *m_adBlockPage;
-    QList<AdBlockSubscription*> m_subscriptions;
-
+  bool m_loaded;
+  bool m_enabled;
+  AutoSaver *m_saveTimer;
+  QPointer<AdBlockDialog> m_adBlockDialog;
+  AdBlockNetwork *m_adBlockNetwork;
+  AdBlockPage *m_adBlockPage;
+  QList<AdBlockSubscription *> m_subscriptions;
 };
 
 #endif // ADBLOCKMANAGER_H
-

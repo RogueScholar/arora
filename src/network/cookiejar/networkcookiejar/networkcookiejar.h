@@ -1,5 +1,6 @@
 /*
-   Copyright (C) 2009, Torch Mobile Inc. and Linden Research, Inc. All rights reserved.
+   Copyright (C) 2009, Torch Mobile Inc. and Linden Research, Inc. All rights
+   reserved.
 */
 
 /* ***** BEGIN LICENSE BLOCK *****
@@ -41,26 +42,26 @@
 
 class NetworkCookieJarPrivate;
 class NetworkCookieJar : public QNetworkCookieJar {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    NetworkCookieJar(QObject *parent = 0);
-    ~NetworkCookieJar();
+  NetworkCookieJar(QObject *parent = 0);
+  ~NetworkCookieJar();
 
-    virtual QList<QNetworkCookie> cookiesForUrl(const QUrl & url) const;
-    virtual bool setCookiesFromUrl(const QList<QNetworkCookie> &cookieList, const QUrl &url);
+  virtual QList<QNetworkCookie> cookiesForUrl(const QUrl &url) const;
+  virtual bool setCookiesFromUrl(const QList<QNetworkCookie> &cookieList,
+                                 const QUrl &url);
 
 protected:
-    QByteArray saveState() const;
-    bool restoreState(const QByteArray &state);
-    void endSession();
+  QByteArray saveState() const;
+  bool restoreState(const QByteArray &state);
+  void endSession();
 
-    QList<QNetworkCookie> allCookies() const;
-    void setAllCookies(const QList<QNetworkCookie> &cookieList);
-    void setSecondLevelDomains(const QStringList &secondLevelDomains);
+  QList<QNetworkCookie> allCookies() const;
+  void setAllCookies(const QList<QNetworkCookie> &cookieList);
+  void setSecondLevelDomains(const QStringList &secondLevelDomains);
 
 private:
-    NetworkCookieJarPrivate *d;
+  NetworkCookieJarPrivate *d;
 };
 
 #endif
-

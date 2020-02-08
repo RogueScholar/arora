@@ -76,26 +76,26 @@ QT_END_NAMESPACE
     Example usage: used to keep the main window stop action in sync with
     the current tabs webview's stop action.
  */
-class WebActionMapper : public QObject
-{
-    Q_OBJECT
+class WebActionMapper : public QObject {
+  Q_OBJECT
 
 public:
-    WebActionMapper(QAction *root, QWebPage::WebAction webAction, QObject *parent);
-    QWebPage::WebAction webAction() const;
-    void addChild(QAction *action);
-    void updateCurrent(QWebPage *currentParent);
+  WebActionMapper(QAction *root, QWebPage::WebAction webAction,
+                  QObject *parent);
+  QWebPage::WebAction webAction() const;
+  void addChild(QAction *action);
+  void updateCurrent(QWebPage *currentParent);
 
 private slots:
-    void rootTriggered();
-    void childChanged();
-    void rootDestroyed();
-    void currentDestroyed();
+  void rootTriggered();
+  void childChanged();
+  void rootDestroyed();
+  void currentDestroyed();
 
 private:
-    QWebPage *m_currentParent;
-    QAction *m_root;
-    QWebPage::WebAction m_webAction;
+  QWebPage *m_currentParent;
+  QAction *m_root;
+  QWebPage::WebAction m_webAction;
 };
 
 #endif // WEBACTIONMAPPER_H

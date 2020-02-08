@@ -29,21 +29,20 @@
 #ifndef WEBPAGEPROXY_H
 #define WEBPAGEPROXY_H
 
-#include <qnetworkaccessmanager.h>
 #include <QtWebKit>
 #include <QtWebKitWidgets>
+#include <qnetworkaccessmanager.h>
 
-class WebPageProxy : public QWebPage
-{
-    Q_OBJECT
+class WebPageProxy : public QWebPage {
+  Q_OBJECT
 
 public:
-    WebPageProxy(QObject *parent = 0);
-    static int pageAttributeId();
+  WebPageProxy(QObject *parent = 0);
+  static int pageAttributeId();
 
 protected:
-    friend class NetworkAccessManagerProxy;
-    virtual void populateNetworkRequest(QNetworkRequest &request);
+  friend class NetworkAccessManagerProxy;
+  virtual void populateNetworkRequest(QNetworkRequest &request);
 };
 
 #endif // WEBPAGEPROXY_H

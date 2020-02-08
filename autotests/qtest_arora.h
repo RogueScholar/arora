@@ -28,15 +28,13 @@
 
 #undef QTEST_MAIN
 
-#define QTEST_MAIN(TestObject) \
-int main(int argc, char *argv[]) \
-{ \
-    Q_INIT_RESOURCE(htmls); \
-    Q_INIT_RESOURCE(data); \
-    BrowserApplication app(argc, argv); \
-    TestObject tc; \
-    return QTest::qExec(&tc, argc, argv); \
-}
+#define QTEST_MAIN(TestObject)                                                 \
+  int main(int argc, char *argv[]) {                                           \
+    Q_INIT_RESOURCE(htmls);                                                    \
+    Q_INIT_RESOURCE(data);                                                     \
+    BrowserApplication app(argc, argv);                                        \
+    TestObject tc;                                                             \
+    return QTest::qExec(&tc, argc, argv);                                      \
+  }
 
 #endif
-

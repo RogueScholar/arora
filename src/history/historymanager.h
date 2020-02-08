@@ -69,97 +69,95 @@
 #include <qurl.h>
 #include <qwebhistoryinterface.h>
 
-class HistoryEntry
-{
+class HistoryEntry {
 public:
-    HistoryEntry() {}
-    HistoryEntry(const QString &u,
-                 const QDateTime &d = QDateTime(), const QString &t = QString())
-        : url(u), title(t), dateTime(d) {}
+  HistoryEntry() {}
+  HistoryEntry(const QString &u, const QDateTime &d = QDateTime(),
+               const QString &t = QString())
+      : url(u), title(t), dateTime(d) {}
 
-    inline bool operator==(const HistoryEntry &other) const {
-        return other.title == title
-               && other.url == url && other.dateTime == dateTime;
-    }
+  inline bool operator==(const HistoryEntry &other) const {
+    return other.title == title && other.url == url &&
+           other.dateTime == dateTime;
+  }
 
-    // history is sorted in reverse
-    inline bool operator <(const HistoryEntry &other) const
-    {
-        return dateTime > other.dateTime;
-    }
+  // history is sorted in reverse
+  inline bool operator<(const HistoryEntry &other) const {
+    return dateTime > other.dateTime;
+  }
 
-    QString userTitle() const;
+  QString userTitle() const;
 
-    QString url;
-    QString title;
-    QDateTime dateTime;
+  QString url;
+  QString title;
+  QDateTime dateTime;
 };
 
 class AutoSaver;
 class HistoryModel;
 class HistoryFilterModel;
 class HistoryTreeModel;
-class HistoryManager : public QWebHistoryInterface
-{
-    Q_OBJECT
-    Q_PROPERTY(int daysToExpire READ daysToExpire WRITE setDaysToExpire)
+class HistoryManager : public QWebHistoryInterface {
+  Q_OBJECT
+  Q_PROPERTY(int daysToExpire READ daysToExpire WRITE setDaysToExpire)
 
 signals:
-    void historyCleared();
-    void historyGoingToChange();
-    void historyReset();
-    void entryAdded(const HistoryEntry &item);
-    void entryRemoved(const HistoryEntry &item);
-    void entryUpdated(int offset);
+  void historyCleared();
+  void historyGoingToChange();
+  void historyReset();
+  void entryAdded(const HistoryEntry &item);
+  void entryRemoved(const HistoryEntry &item);
+  void entryUpdated(int offset);
 
 public:
-    HistoryManager(QObject *parent = 0);
-    ~HistoryManager();
+  HistoryManager(QObject *parent = 0);
+  ~HistoryManager();
 
-    bool historyContains(const QString &url) const;
-    void addHistoryEntry(const QString &url);
-    void updateHistoryEntry(const QUrl &url, const QString &title);
-    void removeHistoryEntry(const QUrl &url, const QString &title = QString());
+  bool historyContains(const QString &url) const;
+  void addHistoryEntry(const QString &url);
+  void updateHistoryEntry(const QUrl &url, const QString &title);
+  void removeHistoryEntry(const QUrl &url, const QString &title = QString());
 
-    int daysToExpire() const;
-    void setDaysToExpire(int limit);
+  int daysToExpire() const;
+  void setDaysToExpire(int limit);
 
-    QList<HistoryEntry> history() const;
-    void setHistory(const QList<HistoryEntry> &history, bool loadedAndSorted = false);
+  QList<HistoryEntry> history() const;
+  void setHistory(const QList<HistoryEntry> &history,
+                  bool loadedAndSorted = false);
 
-    // History manager keeps around these models for use by the completer and other classes
-    HistoryModel *historyModel() const;
-    HistoryFilterModel *historyFilterModel() const;
-    HistoryTreeModel *historyTreeModel() const;
+  // History manager keeps around these models for use by the completer and
+  // other classes
+  HistoryModel *historyModel() const;
+  HistoryFilterModel *historyFilterModel() const;
+  HistoryTreeModel *historyTreeModel() const;
 
 public slots:
-    void clear();
-    void loadSettings();
+  void clear();
+  void loadSettings();
 
 private slots:
-    void save();
-    void checkForExpired();
+  void save();
+  void checkForExpired();
 
 protected:
-    void prependHistoryEntry(const HistoryEntry &item);
-    void removeHistoryEntry(const HistoryEntry &item);
+  void prependHistoryEntry(const HistoryEntry &item);
+  void removeHistoryEntry(const HistoryEntry &item);
 
 private:
-    void load();
-    QString atomicString(const QString &string);
-    void startFrecencyTimer();
+  void load();
+  QString atomicString(const QString &string);
+  void startFrecencyTimer();
 
-    AutoSaver *m_saveTimer;
-    int m_daysToExpire;
-    QTimer m_expiredTimer;
-    QHash<QString, int> m_atomicStringHash;
-    QList<HistoryEntry> m_history;
-    QString m_lastSavedUrl;
+  AutoSaver *m_saveTimer;
+  int m_daysToExpire;
+  QTimer m_expiredTimer;
+  QHash<QString, int> m_atomicStringHash;
+  QList<HistoryEntry> m_history;
+  QString m_lastSavedUrl;
 
-    HistoryModel *m_historyModel;
-    HistoryFilterModel *m_historyFilterModel;
-    HistoryTreeModel *m_historyTreeModel;
+  HistoryModel *m_historyModel;
+  HistoryFilterModel *m_historyFilterModel;
+  HistoryTreeModel *m_historyTreeModel;
 };
 
 #endif // HISTORYMANAGER_H
-

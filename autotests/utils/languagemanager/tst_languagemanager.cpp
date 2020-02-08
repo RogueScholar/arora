@@ -26,127 +26,109 @@
  * SUCH DAMAGE.
  */
 
-#include <qtest.h>
 #include <qsignalspy.h>
+#include <qtest.h>
 
 #include <languagemanager.h>
 #include <qlocale.h>
 
-class tst_LanguageManager : public QObject
-{
-    Q_OBJECT
+class tst_LanguageManager : public QObject {
+  Q_OBJECT
 
 public slots:
-    void initTestCase();
-    void cleanupTestCase();
-    void init();
-    void cleanup();
+  void initTestCase();
+  void cleanupTestCase();
+  void init();
+  void cleanup();
 
 private slots:
-    void languagemanager_data();
-    void languagemanager();
+  void languagemanager_data();
+  void languagemanager();
 
-    void isLanguageAvailable_data();
-    void isLanguageAvailable();
-    void chooseNewLanguage_data();
-    void chooseNewLanguage();
-    void setCurrentLanguage_data();
-    void setCurrentLanguage();
+  void isLanguageAvailable_data();
+  void isLanguageAvailable();
+  void chooseNewLanguage_data();
+  void chooseNewLanguage();
+  void setCurrentLanguage_data();
+  void setCurrentLanguage();
 };
 
 // Subclass that exposes the protected functions.
-class SubLanguageManager : public LanguageManager
-{
+class SubLanguageManager : public LanguageManager {
 public:
-    SubLanguageManager() : LanguageManager() {
-        addLocaleDirectory(qApp->applicationDirPath() + QLatin1String("/.qm/locale"));
-    }
-
+  SubLanguageManager() : LanguageManager() {
+    addLocaleDirectory(qApp->applicationDirPath() +
+                       QLatin1String("/.qm/locale"));
+  }
 };
 
-class TestWidget : public QWidget
-{
+class TestWidget : public QWidget {
 public:
-    void changeEvent(QEvent *event) {
-        if (event->type() == QEvent::LanguageChange)
-            retranslate = true;
-        QWidget::changeEvent(event);
-    }
-    bool retranslate;
+  void changeEvent(QEvent *event) {
+    if (event->type() == QEvent::LanguageChange)
+      retranslate = true;
+    QWidget::changeEvent(event);
+  }
+  bool retranslate;
 };
-
 
 // This will be called before the first test function is executed.
 // It is only called once.
-void tst_LanguageManager::initTestCase()
-{
-}
+void tst_LanguageManager::initTestCase() {}
 
 // This will be called after the last test function is executed.
 // It is only called once.
-void tst_LanguageManager::cleanupTestCase()
-{
-}
+void tst_LanguageManager::cleanupTestCase() {}
 
 // This will be called before each test function is executed.
-void tst_LanguageManager::init()
-{
-    SubLanguageManager manager;
-    manager.setCurrentLanguage(QString());
+void tst_LanguageManager::init() {
+  SubLanguageManager manager;
+  manager.setCurrentLanguage(QString());
 }
 
 // This will be called after every test function.
-void tst_LanguageManager::cleanup()
-{
+void tst_LanguageManager::cleanup() {}
+
+void tst_LanguageManager::languagemanager_data() {}
+
+void tst_LanguageManager::languagemanager() {
+  SubLanguageManager manager;
+  manager.languages();
+  // spawns an event loop...
+  // manager.chooseNewLanguage();
+
+  QString fallbackLanguage;
+  if (manager.isLanguageAvailable(QLocale::system().name()))
+    fallbackLanguage = QLocale::system().name();
+
+  QCOMPARE(manager.currentLanguage(), fallbackLanguage);
+  manager.setCurrentLanguage(QString());
 }
 
-void tst_LanguageManager::languagemanager_data()
-{
+void tst_LanguageManager::isLanguageAvailable_data() {
+  QTest::addColumn<QString>("language");
+  QTest::addColumn<bool>("available");
+  QTest::newRow("null") << QString() << true;
+  QTest::newRow("fallback0") << "ca_ES" << true;
+  QTest::newRow("fallback1") << "ca_ES.UTF-8" << true;
+  QTest::newRow("fallback2") << "de_AT" << true;
 }
 
-void tst_LanguageManager::languagemanager()
-{
-    SubLanguageManager manager;
-    manager.languages();
-    // spawns an event loop...
-    // manager.chooseNewLanguage();
-
-    QString fallbackLanguage;
-    if (manager.isLanguageAvailable(QLocale::system().name()))
-        fallbackLanguage = QLocale::system().name();
-
-    QCOMPARE(manager.currentLanguage(), fallbackLanguage);
-    manager.setCurrentLanguage(QString());
+void tst_LanguageManager::isLanguageAvailable() {
+  QFETCH(QString, language);
+  QFETCH(bool, available);
+  SubLanguageManager manager;
+  QCOMPARE(manager.isLanguageAvailable(language), available);
 }
 
-void tst_LanguageManager::isLanguageAvailable_data()
-{
-    QTest::addColumn<QString>("language");
-    QTest::addColumn<bool>("available");
-    QTest::newRow("null") << QString() << true;
-    QTest::newRow("fallback0") << "ca_ES" << true;
-    QTest::newRow("fallback1") << "ca_ES.UTF-8" << true;
-    QTest::newRow("fallback2") << "de_AT" << true;
-}
-
-void tst_LanguageManager::isLanguageAvailable()
-{
-    QFETCH(QString, language);
-    QFETCH(bool, available);
-    SubLanguageManager manager;
-    QCOMPARE(manager.isLanguageAvailable(language), available);
-}
-
-void tst_LanguageManager::chooseNewLanguage_data()
-{
-    QTest::addColumn<int>("foo");
-    QTest::newRow("null") << 0;
+void tst_LanguageManager::chooseNewLanguage_data() {
+  QTest::addColumn<int>("foo");
+  QTest::newRow("null") << 0;
 }
 
 // public void chooseNewLanguage()
-void tst_LanguageManager::chooseNewLanguage()
-{
-    // how do you test this?
+void tst_LanguageManager::chooseNewLanguage() {
+  // how do you test this?
 #if 0
     QFETCH(int, foo);
 
@@ -154,62 +136,60 @@ void tst_LanguageManager::chooseNewLanguage()
 
     manager.chooseNewLanguage();
 #endif
-    QSKIP("Test is not implemented.");
+  QSKIP("Test is not implemented.");
 }
 
-void tst_LanguageManager::setCurrentLanguage_data()
-{
-    SubLanguageManager manager;
+void tst_LanguageManager::setCurrentLanguage_data() {
+  SubLanguageManager manager;
 
-    QString fallbackLanguage;
-    if (manager.isLanguageAvailable(QLocale::system().name()))
-        fallbackLanguage = QLocale::system().name();
+  QString fallbackLanguage;
+  if (manager.isLanguageAvailable(QLocale::system().name()))
+    fallbackLanguage = QLocale::system().name();
 
-    QTest::addColumn<QString>("language");
-    QTest::addColumn<bool>("success");
-    QTest::addColumn<QString>("result");
-    QTest::newRow("null-foo") << QString("foo") << false << fallbackLanguage;
-    QTest::newRow("null-null") << QString() << false << fallbackLanguage;
+  QTest::addColumn<QString>("language");
+  QTest::addColumn<bool>("success");
+  QTest::addColumn<QString>("result");
+  QTest::newRow("null-foo") << QString("foo") << false << fallbackLanguage;
+  QTest::newRow("null-null") << QString() << false << fallbackLanguage;
 
-    QString validLanguage = manager.languages().value(0);
-    if (validLanguage.isEmpty())
-        QSKIP("no languages to test with");
-    QTest::newRow(validLanguage.toLatin1()) << validLanguage << true << validLanguage;
-    QTest::newRow("fallback") << "ca_ES" << true << "ca_ES";
+  QString validLanguage = manager.languages().value(0);
+  if (validLanguage.isEmpty())
+    QSKIP("no languages to test with");
+  QTest::newRow(validLanguage.toLatin1())
+      << validLanguage << true << validLanguage;
+  QTest::newRow("fallback") << "ca_ES" << true << "ca_ES";
 }
 
 // public void setCurrentLanguage(QString const &language)
-void tst_LanguageManager::setCurrentLanguage()
-{
-    QFETCH(QString, language);
-    QFETCH(bool, success);
-    QFETCH(QString, result);
+void tst_LanguageManager::setCurrentLanguage() {
+  QFETCH(QString, language);
+  QFETCH(bool, success);
+  QFETCH(QString, result);
 
-    SubLanguageManager manager;
-    QString initialLanguage = manager.currentLanguage();
-    QSignalSpy spy(&manager, SIGNAL(languageChanged(const QString &)));
+  SubLanguageManager manager;
+  QString initialLanguage = manager.currentLanguage();
+  QSignalSpy spy(&manager, SIGNAL(languageChanged(const QString &)));
 
-    TestWidget widget;
-    widget.retranslate = false;
-    QCOMPARE(manager.setCurrentLanguage(language), success);
-    QCOMPARE(manager.currentLanguage(), result);
+  TestWidget widget;
+  widget.retranslate = false;
+  QCOMPARE(manager.setCurrentLanguage(language), success);
+  QCOMPARE(manager.currentLanguage(), result);
 
-    // test if we set the default locale properly
-    // this is essential for opensearch localization
-    QLocale currentLocale(manager.currentLanguage());
-    if (manager.currentLanguage().isEmpty())
-        currentLocale = QLocale();
-    QCOMPARE(currentLocale, QLocale());
+  // test if we set the default locale properly
+  // this is essential for opensearch localization
+  QLocale currentLocale(manager.currentLanguage());
+  if (manager.currentLanguage().isEmpty())
+    currentLocale = QLocale();
+  QCOMPARE(currentLocale, QLocale());
 
-    qApp->processEvents();
-    QCOMPARE(widget.retranslate, success);
-    QCOMPARE(spy.count(), success ? 1 : 0);
-    if (success) {
-        QVERIFY(manager.setCurrentLanguage(QString()));
-        QCOMPARE(spy.count(), 2);
-    }
+  qApp->processEvents();
+  QCOMPARE(widget.retranslate, success);
+  QCOMPARE(spy.count(), success ? 1 : 0);
+  if (success) {
+    QVERIFY(manager.setCurrentLanguage(QString()));
+    QCOMPARE(spy.count(), 2);
+  }
 }
 
 QTEST_MAIN(tst_LanguageManager)
 #include "tst_languagemanager.moc"
-

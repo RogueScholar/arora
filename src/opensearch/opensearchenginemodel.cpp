@@ -25,156 +25,154 @@
 #include "opensearchengine.h"
 #include "opensearchmanager.h"
 
-#include <qimage.h>
 #include <qicon.h>
+#include <qimage.h>
 
-OpenSearchEngineModel::OpenSearchEngineModel(OpenSearchManager *manager, QObject *parent)
-    : QAbstractTableModel(parent)
-    , m_manager(manager)
-{
-    connect(manager, SIGNAL(changed()),
-            this, SLOT(enginesChanged()));
+OpenSearchEngineModel::OpenSearchEngineModel(OpenSearchManager *manager,
+                                             QObject *parent)
+    : QAbstractTableModel(parent), m_manager(manager) {
+  connect(manager, SIGNAL(changed()), this, SLOT(enginesChanged()));
 }
 
-bool OpenSearchEngineModel::removeRows(int row, int count, const QModelIndex &parent)
-{
-    if (parent.isValid())
-        return false;
+bool OpenSearchEngineModel::removeRows(int row, int count,
+                                       const QModelIndex &parent) {
+  if (parent.isValid())
+    return false;
 
-    if (count <= 0)
-        return false;
+  if (count <= 0)
+    return false;
 
-    if (rowCount() <= 1)
-        return false;
+  if (rowCount() <= 1)
+    return false;
 
-    int lastRow = row + count - 1;
+  int lastRow = row + count - 1;
 
-    beginRemoveRows(parent, row, lastRow);
+  beginRemoveRows(parent, row, lastRow);
 
-    QStringList nameList = m_manager->allEnginesNames();
-    for (int i = row; i <= lastRow; ++i)
-        m_manager->removeEngine(nameList.at(i));
+  QStringList nameList = m_manager->allEnginesNames();
+  for (int i = row; i <= lastRow; ++i)
+    m_manager->removeEngine(nameList.at(i));
 
-    // removeEngine emits changed
-    //endRemoveRows();
+  // removeEngine emits changed
+  // endRemoveRows();
 
-    return true;
+  return true;
 }
 
-int OpenSearchEngineModel::rowCount(const QModelIndex &parent) const
-{
-    return (parent.isValid()) ? 0 : m_manager->enginesCount();
+int OpenSearchEngineModel::rowCount(const QModelIndex &parent) const {
+  return (parent.isValid()) ? 0 : m_manager->enginesCount();
 }
 
-int OpenSearchEngineModel::columnCount(const QModelIndex &parent) const
-{
-    Q_UNUSED(parent);
-    return 2;
+int OpenSearchEngineModel::columnCount(const QModelIndex &parent) const {
+  Q_UNUSED(parent);
+  return 2;
 }
 
-Qt::ItemFlags OpenSearchEngineModel::flags(const QModelIndex &index) const
-{
-    switch (index.column()) {
-    case 1:
-        return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
-    default:
-        return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-    }
+Qt::ItemFlags OpenSearchEngineModel::flags(const QModelIndex &index) const {
+  switch (index.column()) {
+  case 1:
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
+  default:
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+  }
 }
 
-QVariant OpenSearchEngineModel::data(const QModelIndex &index, int role) const
-{
-    if (index.row() >= m_manager->enginesCount() || index.row() < 0)
-        return QVariant();
-
-    OpenSearchEngine *engine = m_manager->engine(m_manager->allEnginesNames().at(index.row()));
-
-    if (!engine)
-        return QVariant();
-
-    switch (index.column()) {
-    case 0:
-        switch (role) {
-        case Qt::DisplayRole:
-            return engine->name();
-            break;
-        case Qt::DecorationRole: {
-            QImage image = engine->image();
-            if (image.isNull())
-                return BrowserApplication::icon(engine->imageUrl());
-            return image;
-            break;
-        }
-        case Qt::ToolTipRole:
-            QString description = tr("<strong>Description:</strong> %1").arg(engine->description());
-
-            if (engine->providesSuggestions()) {
-                description += QLatin1String("<br />");
-                description += tr("<strong>Provides contextual suggestions</strong>");
-            }
-
-            return description;
-            break;
-        }
-        break;
-
-    case 1:
-        switch (role) {
-        case Qt::EditRole:
-        case Qt::DisplayRole:
-            return QStringList(m_manager->keywordsForEngine(engine)).join(QLatin1String(","));
-        case Qt::ToolTipRole:
-            return tr("Comma-separated list of keywords that may be entered in the location bar"
-                      "followed by search terms to search with this engine");
-        }
-        break;
-    }
-
+QVariant OpenSearchEngineModel::data(const QModelIndex &index, int role) const {
+  if (index.row() >= m_manager->enginesCount() || index.row() < 0)
     return QVariant();
-}
 
-bool OpenSearchEngineModel::setData(const QModelIndex &index, const QVariant &value, int role)
-{
-    if (index.column() != 1)
-        return false;
+  OpenSearchEngine *engine =
+      m_manager->engine(m_manager->allEnginesNames().at(index.row()));
 
-    if (index.row() >= rowCount() || index.row() < 0)
-        return false;
-
-    if (role != Qt::EditRole)
-        return false;
-
-    QString engineName = m_manager->allEnginesNames().at(index.row());
-    QStringList keywords = value.toString().split(QRegExp(QLatin1String("[ ,]+")), QString::SkipEmptyParts);
-
-    m_manager->setKeywordsForEngine(m_manager->engine(engineName), keywords);
-
-    return true;
-}
-
-QVariant OpenSearchEngineModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-    if (orientation == Qt::Vertical)
-        return QVariant();
-
-    if (role != Qt::DisplayRole)
-        return QVariant();
-
-    switch (section) {
-    case 0:
-        return tr("Name");
-    case 1:
-        return tr("Keywords");
-    }
-
+  if (!engine)
     return QVariant();
+
+  switch (index.column()) {
+  case 0:
+    switch (role) {
+    case Qt::DisplayRole:
+      return engine->name();
+      break;
+    case Qt::DecorationRole: {
+      QImage image = engine->image();
+      if (image.isNull())
+        return BrowserApplication::icon(engine->imageUrl());
+      return image;
+      break;
+    }
+    case Qt::ToolTipRole:
+      QString description =
+          tr("<strong>Description:</strong> %1").arg(engine->description());
+
+      if (engine->providesSuggestions()) {
+        description += QLatin1String("<br />");
+        description += tr("<strong>Provides contextual suggestions</strong>");
+      }
+
+      return description;
+      break;
+    }
+    break;
+
+  case 1:
+    switch (role) {
+    case Qt::EditRole:
+    case Qt::DisplayRole:
+      return QStringList(m_manager->keywordsForEngine(engine))
+          .join(QLatin1String(","));
+    case Qt::ToolTipRole:
+      return tr("Comma-separated list of keywords that may be entered in the "
+                "location bar"
+                "followed by search terms to search with this engine");
+    }
+    break;
+  }
+
+  return QVariant();
 }
 
-void OpenSearchEngineModel::enginesChanged()
-{
-    // TODO: fix to call beginResetModel() when appropriate
-    beginResetModel();
+bool OpenSearchEngineModel::setData(const QModelIndex &index,
+                                    const QVariant &value, int role) {
+  if (index.column() != 1)
+    return false;
 
-    endResetModel();
+  if (index.row() >= rowCount() || index.row() < 0)
+    return false;
+
+  if (role != Qt::EditRole)
+    return false;
+
+  QString engineName = m_manager->allEnginesNames().at(index.row());
+  QStringList keywords = value.toString().split(QRegExp(QLatin1String("[ ,]+")),
+                                                QString::SkipEmptyParts);
+
+  m_manager->setKeywordsForEngine(m_manager->engine(engineName), keywords);
+
+  return true;
 }
 
+QVariant OpenSearchEngineModel::headerData(int section,
+                                           Qt::Orientation orientation,
+                                           int role) const {
+  if (orientation == Qt::Vertical)
+    return QVariant();
+
+  if (role != Qt::DisplayRole)
+    return QVariant();
+
+  switch (section) {
+  case 0:
+    return tr("Name");
+  case 1:
+    return tr("Keywords");
+  }
+
+  return QVariant();
+}
+
+void OpenSearchEngineModel::enginesChanged() {
+  // TODO: fix to call beginResetModel() when appropriate
+  beginResetModel();
+
+  endResetModel();
+}
