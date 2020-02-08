@@ -37,4 +37,3 @@ Description: Arora is a lightweight cross-platform web browser
  .
  Arora began as a demo by Benjamin Meyer to help test the QtWebKit component,
  but since then it has grown into its own project outside of Qt.
- 
