@@ -62,19 +62,29 @@ class SubWebPage : public WebPage
 {
 public:
     QString call_userAgentForUrl(const QUrl &url) const
-        { return SubWebPage::userAgentForUrl(url); }
+    {
+        return SubWebPage::userAgentForUrl(url);
+    }
 
     void call_aboutToLoadUrl(QUrl const &url)
-        { return SubWebPage::aboutToLoadUrl(url); }
+    {
+        return SubWebPage::aboutToLoadUrl(url);
+    }
 
     bool call_acceptNavigationRequest(QWebFrame *frame, QNetworkRequest const &request, NavigationType type)
-        { return SubWebPage::acceptNavigationRequest(frame, request, type); }
+    {
+        return SubWebPage::acceptNavigationRequest(frame, request, type);
+    }
 
     QObject *call_createPlugin(QString const &classId, QUrl const &url, QStringList const &paramNames, QStringList const &paramValues)
-        { return SubWebPage::createPlugin(classId, url, paramNames, paramValues); }
+    {
+        return SubWebPage::createPlugin(classId, url, paramNames, paramValues);
+    }
 
     QWebPage *call_createWindow(QWebPage::WebWindowType type)
-        { return SubWebPage::createWindow(type); }
+    {
+        return SubWebPage::createWindow(type);
+    }
 };
 
 // This will be called before the first test function is executed.
@@ -301,16 +311,16 @@ void tst_WebPage::linkedResources()
     SubWebPage page;
 
     QString html = "<html>"
-        "<head>"
-            "<link rel=\"stylesheet\" type=\"text/css\" href=\"styles/common.css\" />"
-            "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"./rss.xml\" />"
-            "<link rel=\"alternate\" type=\"application/atom+xml\" href=\"../atom.xml\" title=\"Feed\" />"
-            "<link rel=\"search\" type=\"application/opensearchdescription+xml\" href=\"http://external.foo/search.xml\" />"
-        "</head>"
-        "<body>"
-            "<link rel=\"stylesheet\" type=\"text/css\" href=\"styles/ie.css\" />"
-        "</body>"
-    "</html>";
+                   "<head>"
+                   "<link rel=\"stylesheet\" type=\"text/css\" href=\"styles/common.css\" />"
+                   "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"./rss.xml\" />"
+                   "<link rel=\"alternate\" type=\"application/atom+xml\" href=\"../atom.xml\" title=\"Feed\" />"
+                   "<link rel=\"search\" type=\"application/opensearchdescription+xml\" href=\"http://external.foo/search.xml\" />"
+                   "</head>"
+                   "<body>"
+                   "<link rel=\"stylesheet\" type=\"text/css\" href=\"styles/ie.css\" />"
+                   "</body>"
+                   "</html>";
 
     page.mainFrame()->setHtml(html, QUrl("http://foobar.baz/foo/"));
 

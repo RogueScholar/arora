@@ -122,7 +122,9 @@ public:
     TabWidget(QWidget *parent = 0);
 
     void loadSettings();
-    TabBar *tabBar() { return m_tabBar; }
+    TabBar *tabBar() {
+        return m_tabBar;
+    }
     void clear();
     void addWebAction(QAction *action, QWebPage::WebAction webAction);
 

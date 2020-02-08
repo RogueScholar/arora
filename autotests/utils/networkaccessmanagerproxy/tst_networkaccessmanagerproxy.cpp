@@ -53,7 +53,9 @@ class SubNetworkAccessManagerProxy : public NetworkAccessManagerProxy
 {
 public:
     QNetworkReply *call_createRequest(QNetworkAccessManager::Operation op, QNetworkRequest const &request, QIODevice *outgoingData = 0)
-        { return SubNetworkAccessManagerProxy::createRequest(op, request, outgoingData); }
+    {
+        return SubNetworkAccessManagerProxy::createRequest(op, request, outgoingData);
+    }
 };
 
 // This will be called before the first test function is executed.
@@ -86,8 +88,8 @@ void tst_NetworkAccessManagerProxy::networkaccessmanagerproxy()
 {
     SubNetworkAccessManagerProxy proxy;
     QVERIFY(proxy.call_createRequest(QNetworkAccessManager::GetOperation,
-            QNetworkRequest(),
-            (QIODevice*)0));
+                                     QNetworkRequest(),
+                                     (QIODevice*)0));
 }
 
 // public void setPrimaryNetworkAccessManager(NetworkAccessManagerProxy *primaryManager)

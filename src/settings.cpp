@@ -156,13 +156,27 @@ void SettingsDialog::loadFromSettings()
     int historyExpire = settings.value(QLatin1String("historyLimit")).toInt();
     int idx = 0;
     switch (historyExpire) {
-    case 1: idx = 0; break;
-    case 7: idx = 1; break;
-    case 14: idx = 2; break;
-    case 30: idx = 3; break;
-    case 365: idx = 4; break;
-    case -1: idx = 5; break;
-    case -2: idx = 6; break;
+    case 1:
+        idx = 0;
+        break;
+    case 7:
+        idx = 1;
+        break;
+    case 14:
+        idx = 2;
+        break;
+    case 30:
+        idx = 3;
+        break;
+    case 365:
+        idx = 4;
+        break;
+    case -1:
+        idx = 5;
+        break;
+    case -2:
+        idx = 6;
+        break;
     default:
         idx = 5;
     }
@@ -210,8 +224,8 @@ void SettingsDialog::loadFromSettings()
     QByteArray value = settings.value(QLatin1String("acceptCookies"), QLatin1String("AcceptOnlyFromSitesNavigatedTo")).toByteArray();
     QMetaEnum acceptPolicyEnum = CookieJar::staticMetaObject.enumerator(CookieJar::staticMetaObject.indexOfEnumerator("AcceptPolicy"));
     CookieJar::AcceptPolicy acceptCookies = acceptPolicyEnum.keyToValue(value) == -1 ?
-                        CookieJar::AcceptOnlyFromSitesNavigatedTo :
-                        static_cast<CookieJar::AcceptPolicy>(acceptPolicyEnum.keyToValue(value));
+                                            CookieJar::AcceptOnlyFromSitesNavigatedTo :
+                                            static_cast<CookieJar::AcceptPolicy>(acceptPolicyEnum.keyToValue(value));
     switch (acceptCookies) {
     case CookieJar::AcceptAlways:
         acceptCombo->setCurrentIndex(0);
@@ -227,8 +241,8 @@ void SettingsDialog::loadFromSettings()
     value = settings.value(QLatin1String("keepCookiesUntil"), QLatin1String("Expire")).toByteArray();
     QMetaEnum keepPolicyEnum = CookieJar::staticMetaObject.enumerator(CookieJar::staticMetaObject.indexOfEnumerator("KeepPolicy"));
     CookieJar::KeepPolicy keepCookies = keepPolicyEnum.keyToValue(value) == -1 ?
-                        CookieJar::KeepUntilExpire :
-                        static_cast<CookieJar::KeepPolicy>(keepPolicyEnum.keyToValue(value));
+                                        CookieJar::KeepUntilExpire :
+                                        static_cast<CookieJar::KeepPolicy>(keepPolicyEnum.keyToValue(value));
     switch (keepCookies) {
     case CookieJar::KeepUntilExpire:
         keepUntilCombo->setCurrentIndex(0);
@@ -242,13 +256,25 @@ void SettingsDialog::loadFromSettings()
     }
     int sessionLength = settings.value(QLatin1String("sessionLength"), -1).toInt();
     switch (sessionLength) {
-    case 1: cookieSessionCombo->setCurrentIndex(1); break;
-    case 2: cookieSessionCombo->setCurrentIndex(2); break;
-    case 3: cookieSessionCombo->setCurrentIndex(3); break;
-    case 7: cookieSessionCombo->setCurrentIndex(4); break;
-    case 30: cookieSessionCombo->setCurrentIndex(5); break;
+    case 1:
+        cookieSessionCombo->setCurrentIndex(1);
+        break;
+    case 2:
+        cookieSessionCombo->setCurrentIndex(2);
+        break;
+    case 3:
+        cookieSessionCombo->setCurrentIndex(3);
+        break;
+    case 7:
+        cookieSessionCombo->setCurrentIndex(4);
+        break;
+    case 30:
+        cookieSessionCombo->setCurrentIndex(5);
+        break;
     default:
-    case 0: cookieSessionCombo->setCurrentIndex(0); break;
+    case 0:
+        cookieSessionCombo->setCurrentIndex(0);
+        break;
     }
     filterTrackingCookiesCheckbox->setChecked(settings.value(QLatin1String("filterTrackingCookies"), false).toBool());
     settings.endGroup();
@@ -317,13 +343,27 @@ void SettingsDialog::saveToSettings()
     int historyExpire = expireHistory->currentIndex();
     int idx = -1;
     switch (historyExpire) {
-    case 0: idx = 1; break;
-    case 1: idx = 7; break;
-    case 2: idx = 14; break;
-    case 3: idx = 30; break;
-    case 4: idx = 365; break;
-    case 5: idx = -1; break;
-    case 6: idx = -2; break;
+    case 0:
+        idx = 1;
+        break;
+    case 1:
+        idx = 7;
+        break;
+    case 2:
+        idx = 14;
+        break;
+    case 3:
+        idx = 30;
+        break;
+    case 4:
+        idx = 365;
+        break;
+    case 5:
+        idx = -1;
+        break;
+    case 6:
+        idx = -2;
+        break;
     }
     settings.setValue(QLatin1String("historyLimit"), idx);
     settings.endGroup();
@@ -392,13 +432,25 @@ void SettingsDialog::saveToSettings()
     settings.setValue(QLatin1String("keepCookiesUntil"), QLatin1String(keepPolicyEnum.valueToKey(keepPolicy)));
     int sessionLength = cookieSessionCombo->currentIndex();
     switch (sessionLength) {
-    case 1: sessionLength = 1; break;
-    case 2: sessionLength = 2; break;
-    case 3: sessionLength = 3; break;
-    case 4: sessionLength = 7; break;
-    case 5: sessionLength = 30; break;
+    case 1:
+        sessionLength = 1;
+        break;
+    case 2:
+        sessionLength = 2;
+        break;
+    case 3:
+        sessionLength = 3;
+        break;
+    case 4:
+        sessionLength = 7;
+        break;
+    case 5:
+        sessionLength = 30;
+        break;
     default:
-    case 0: sessionLength = -1; break;
+    case 0:
+        sessionLength = -1;
+        break;
     }
     settings.setValue(QLatin1String("sessionLength"), sessionLength);
     settings.setValue(QLatin1String("filterTrackingCookies"), filterTrackingCookiesCheckbox->isChecked());

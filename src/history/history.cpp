@@ -128,10 +128,12 @@ void HistoryModel::entryUpdated(int offset)
 QVariant HistoryModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal
-        && role == Qt::DisplayRole) {
+            && role == Qt::DisplayRole) {
         switch (section) {
-        case 0: return tr("Title");
-        case 1: return tr("Address");
+        case 0:
+            return tr("Title");
+        case 1:
+            return tr("Address");
         }
     }
     return QAbstractTableModel::headerData(section, orientation, role);
@@ -232,7 +234,7 @@ int HistoryMenuModel::rowCount(const QModelIndex &parent) const
         int folders = sourceModel()->rowCount();
         int bumpedItems = bumpedRows();
         if (bumpedItems <= MOVEDROWS
-            && bumpedItems == sourceModel()->rowCount(sourceModel()->index(0, 0)))
+                && bumpedItems == sourceModel()->rowCount(sourceModel()->index(0, 0)))
             --folders;
         return bumpedItems + folders;
     }
@@ -284,8 +286,8 @@ QModelIndex HistoryMenuModel::mapToSource(const QModelIndex &proxyIndex) const
 QModelIndex HistoryMenuModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (row < 0
-        || column < 0 || column >= columnCount(parent)
-        || parent.column() > 0)
+            || column < 0 || column >= columnCount(parent)
+            || parent.column() > 0)
         return QModelIndex();
     if (!parent.isValid())
         return createIndex(row, column, -1);
@@ -396,7 +398,7 @@ void HistoryMenu::showHistoryDialog()
 void HistoryMenu::clearHistoryDialog()
 {
     if (m_history && QMessageBox::question(0, tr("Clear History"), tr("Do you want to clear the history?"),
-            QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes) {
+                                           QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes) {
         m_history->clear();
     }
 }
@@ -598,7 +600,7 @@ QModelIndex HistoryFilterModel::mapFromSource(const QModelIndex &sourceIndex) co
     int sourceOffset = sourceModel()->rowCount() - sourceIndex.row();
 
     QList<HistoryData>::iterator pos = qBinaryFind(m_filteredRows.begin(),
-        m_filteredRows.end(), HistoryData(sourceOffset, -1));
+                                       m_filteredRows.end(), HistoryData(sourceOffset, -1));
 
     if (pos == m_filteredRows.end())
         return QModelIndex();
@@ -610,7 +612,7 @@ QModelIndex HistoryFilterModel::index(int row, int column, const QModelIndex &pa
 {
     load();
     if (row < 0 || row >= rowCount(parent)
-        || column < 0 || column >= columnCount(parent))
+            || column < 0 || column >= columnCount(parent))
         return QModelIndex();
 
     return createIndex(row, column, m_filteredRows[row].tailOffset);
@@ -639,7 +641,7 @@ void HistoryFilterModel::load() const
         } else {
             // we already know about this url: just increment its frecency score
             QList<HistoryData>::iterator pos = qBinaryFind(m_filteredRows.begin(),
-                m_filteredRows.end(), HistoryData(m_historyHash[url], -1));
+                                               m_filteredRows.end(), HistoryData(m_historyHash[url], -1));
             Q_ASSERT(pos != m_filteredRows.end());
             pos->frecency += frecencyScore(idx);
         }
@@ -658,7 +660,7 @@ void HistoryFilterModel::sourceRowsInserted(const QModelIndex &parent, int start
     int currentFrecency = 0;
     if (m_historyHash.contains(url)) {
         QList<HistoryData>::iterator pos = qBinaryFind(m_filteredRows.begin(),
-            m_filteredRows.end(), HistoryData(m_historyHash[url], -1));
+                                           m_filteredRows.end(), HistoryData(m_historyHash[url], -1));
         Q_ASSERT(pos != m_filteredRows.end());
         int realRow = pos - m_filteredRows.begin();
         currentFrecency = pos->frecency;
@@ -780,8 +782,8 @@ int HistoryTreeModel::columnCount(const QModelIndex &parent) const
 int HistoryTreeModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.internalId() != 0
-        || parent.column() > 0
-        || !sourceModel())
+            || parent.column() > 0
+            || !sourceModel())
         return 0;
 
     // row count OF dates
@@ -839,8 +841,8 @@ QModelIndex HistoryTreeModel::mapToSource(const QModelIndex &proxyIndex) const
 QModelIndex HistoryTreeModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (row < 0
-        || column < 0 || column >= columnCount(parent)
-        || parent.column() > 0)
+            || column < 0 || column >= columnCount(parent)
+            || parent.column() > 0)
         return QModelIndex();
 
     if (!parent.isValid())
@@ -982,26 +984,26 @@ void HistoryTreeModel::sourceRowsRemoved(const QModelIndex &parent, int start, i
     Q_UNUSED(parent); // Avoid warnings when compiling release
     Q_ASSERT(!parent.isValid());
     if (!m_sourceRowCache.isEmpty())
-    for (int i = end; i >= start;) {
-        QList<int>::iterator it;
-        it = qLowerBound(m_sourceRowCache.begin(), m_sourceRowCache.end(), i);
-        if (*it != i)
-            --it;
-        int row = qMax(0, it - m_sourceRowCache.begin());
-        int offset = m_sourceRowCache[row];
-        QModelIndex dateParent = index(row, 0);
-        // If we can remove all the rows in the date do that and skip over them
-        int rc = rowCount(dateParent);
-        if (i - rc + 1 == offset && start <= i - rc + 1) {
-            m_sourceRowCache.removeAt(row);
-            i -= rc + 1;
-        } else {
-            ++row;
-            --i;
+        for (int i = end; i >= start;) {
+            QList<int>::iterator it;
+            it = qLowerBound(m_sourceRowCache.begin(), m_sourceRowCache.end(), i);
+            if (*it != i)
+                --it;
+            int row = qMax(0, it - m_sourceRowCache.begin());
+            int offset = m_sourceRowCache[row];
+            QModelIndex dateParent = index(row, 0);
+            // If we can remove all the rows in the date do that and skip over them
+            int rc = rowCount(dateParent);
+            if (i - rc + 1 == offset && start <= i - rc + 1) {
+                m_sourceRowCache.removeAt(row);
+                i -= rc + 1;
+            } else {
+                ++row;
+                --i;
+            }
+            for (int j = row; j < m_sourceRowCache.count(); ++j)
+                --m_sourceRowCache[j];
         }
-        for (int j = row; j < m_sourceRowCache.count(); ++j)
-            --m_sourceRowCache[j];
-    }
     if (removingDown) {
         endRemoveRows();
         removingDown = false;

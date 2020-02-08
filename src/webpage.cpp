@@ -212,7 +212,7 @@ void WebPage::addExternalBinding(QWebFrame *frame)
         frame = qobject_cast<QWebFrame*>(sender());
 
         if (frame->url().scheme() == QLatin1String("qrc")
-            && frame->url().path() == QLatin1String("/startpage.html")) {
+                && frame->url().path() == QLatin1String("/startpage.html")) {
 
             if (!m_javaScriptAroraObject)
                 m_javaScriptAroraObject = new JavaScriptAroraObject(this);
@@ -261,16 +261,16 @@ bool WebPage::acceptNavigationRequest(QWebFrame *frame, const QNetworkRequest &r
 
     QString scheme = request.url().scheme();
     if (scheme == QLatin1String("mailto")
-        || scheme == QLatin1String("ftp")) {
+            || scheme == QLatin1String("ftp")) {
         BrowserApplication::instance()->askDesktopToOpenUrl(request.url());
         return false;
     }
 
     if (type == QWebPage::NavigationTypeFormResubmitted) {
         QMessageBox::StandardButton button = QMessageBox::warning(view(), tr("Resending POST request"),
-                             tr("In order to display the site, the request along with all the data must be sent once again, "
-                                "which may lead to some unexpected behaviour of the site e.g. the same action might be "
-                                "performed once again. Do you want to continue anyway?"), QMessageBox::Yes | QMessageBox::No);
+                                             tr("In order to display the site, the request along with all the data must be sent once again, "
+                                                "which may lead to some unexpected behaviour of the site e.g. the same action might be "
+                                                "performed once again. Do you want to continue anyway?"), QMessageBox::Yes | QMessageBox::No);
         if (button != QMessageBox::Yes)
             return false;
     }
@@ -281,8 +281,8 @@ bool WebPage::acceptNavigationRequest(QWebFrame *frame, const QNetworkRequest &r
     // handle the case where we want to do something different then
     // what qwebpage would do
     if (openIn == TabWidget::NewSelectedTab
-        || openIn == TabWidget::NewNotSelectedTab
-        || (frame && openIn == TabWidget::NewWindow)) {
+            || openIn == TabWidget::NewNotSelectedTab
+            || (frame && openIn == TabWidget::NewWindow)) {
         if (WebView *webView = qobject_cast<WebView*>(view())) {
             TabWidget *tabWidget = webView->tabWidget();
             if (tabWidget) {
@@ -311,7 +311,7 @@ void WebPage::loadSettings()
     QSettings settings;
     settings.beginGroup(QLatin1String("tabs"));
     m_openTargetBlankLinksIn = (TabWidget::OpenUrlIn)settings.value(QLatin1String("openTargetBlankLinksIn"),
-                                                                    TabWidget::NewSelectedTab).toInt();
+                               TabWidget::NewSelectedTab).toInt();
     settings.endGroup();
     s_userAgent = settings.value(QLatin1String("userAgent")).toString();
 }
@@ -355,22 +355,22 @@ QObject *WebPage::createPlugin(const QString &classId, const QUrl &url,
 static bool contentSniff(const QByteArray &data)
 {
     if (data.contains("<!doctype")
-        || data.contains("<script")
-        || data.contains("<html")
-        || data.contains("<!--")
-        || data.contains("<head")
-        || data.contains("<iframe")
-        || data.contains("<h1")
-        || data.contains("<div")
-        || data.contains("<font")
-        || data.contains("<table")
-        || data.contains("<a")
-        || data.contains("<style")
-        || data.contains("<title")
-        || data.contains("<b")
-        || data.contains("<body")
-        || data.contains("<br")
-        || data.contains("<p"))
+            || data.contains("<script")
+            || data.contains("<html")
+            || data.contains("<!--")
+            || data.contains("<head")
+            || data.contains("<iframe")
+            || data.contains("<h1")
+            || data.contains("<div")
+            || data.contains("<font")
+            || data.contains("<table")
+            || data.contains("<a")
+            || data.contains("<style")
+            || data.contains("<title")
+            || data.contains("<b")
+            || data.contains("<body")
+            || data.contains("<br")
+            || data.contains("<p"))
         return true;
     return false;
 }

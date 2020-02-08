@@ -87,7 +87,7 @@ QVariant CookieExceptionsModel::headerData(int section, Qt::Orientation orientat
     }
 
     if (orientation == Qt::Horizontal
-        && role == Qt::DisplayRole) {
+            && role == Qt::DisplayRole) {
         switch (section) {
         case 0:
             return tr("Website");
@@ -187,15 +187,15 @@ void CookieExceptionsModel::addRule(QString host, CookieJar::CookieRule rule)
     if (host.isEmpty())
         return;
     switch (rule) {
-        case CookieJar::Allow :
-            addHost(host, m_allowedCookies, m_blockedCookies, m_sessionCookies);
-            return;
-        case CookieJar::Block :
-            addHost(host, m_blockedCookies, m_allowedCookies, m_sessionCookies);
-            return;
-        case CookieJar::AllowForSession :
-            addHost(host, m_sessionCookies, m_allowedCookies, m_blockedCookies);
-            return;
+    case CookieJar::Allow :
+        addHost(host, m_allowedCookies, m_blockedCookies, m_sessionCookies);
+        return;
+    case CookieJar::Block :
+        addHost(host, m_blockedCookies, m_allowedCookies, m_sessionCookies);
+        return;
+    case CookieJar::AllowForSession :
+        addHost(host, m_sessionCookies, m_allowedCookies, m_blockedCookies);
+        return;
     }
 }
 

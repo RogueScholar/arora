@@ -74,7 +74,9 @@ public:
     }
 
     void call_rulesChanged()
-        { return SubAdBlockManager::rulesChanged(); }
+    {
+        return SubAdBlockManager::rulesChanged();
+    }
 };
 
 // This will be called before the first test function is executed.

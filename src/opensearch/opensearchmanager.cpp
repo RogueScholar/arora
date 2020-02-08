@@ -309,9 +309,9 @@ bool OpenSearchManager::confirmAddition(OpenSearchEngine *engine)
     QString host = QUrl(engine->searchUrlTemplate()).host();
 
     QMessageBox::StandardButton button = QMessageBox::question(0, QString(),
-            tr("Do you want to add the following engine to your list of search engines?<br /><br />"
-               "Name: %1<br />Searches on: %2").arg(engine->name(), host),
-            QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+                                         tr("Do you want to add the following engine to your list of search engines?<br /><br />"
+                                            "Name: %1<br />Searches on: %2").arg(engine->name(), host),
+                                         QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
     return (button == QMessageBox::Yes);
 }
 

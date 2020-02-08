@@ -43,10 +43,14 @@ public:
         : QNetworkCookieJar(parent) { }
 
     inline QList<QNetworkCookie> cookiesForUrl(const QUrl &url) const
-        { return NetworkAccessManagerProxy::m_primaryManager->cookieJar()->cookiesForUrl(url); }
+    {
+        return NetworkAccessManagerProxy::m_primaryManager->cookieJar()->cookiesForUrl(url);
+    }
 
     inline bool setCookiesFromUrl(const QList<QNetworkCookie> &cookieList, const QUrl &url)
-        { return NetworkAccessManagerProxy::m_primaryManager->cookieJar()->setCookiesFromUrl(cookieList, url); }
+    {
+        return NetworkAccessManagerProxy::m_primaryManager->cookieJar()->setCookiesFromUrl(cookieList, url);
+    }
 
 };
 

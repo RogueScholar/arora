@@ -175,7 +175,7 @@ void AdBlockSubscription::loadRules()
     }
 
     if (!m_lastUpdate.isValid()
-        || m_lastUpdate.addDays(7) < QDateTime::currentDateTime()) {
+            || m_lastUpdate.addDays(7) < QDateTime::currentDateTime()) {
         updateNow();
     }
 }

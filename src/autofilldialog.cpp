@@ -53,10 +53,12 @@ void AutoFillModel::autoFillChanged()
 QVariant AutoFillModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal
-        && role == Qt::DisplayRole) {
+            && role == Qt::DisplayRole) {
         switch (section) {
-        case 0: return tr("WebSite");
-        case 1: return tr("User Name");
+        case 0:
+            return tr("WebSite");
+        case 1:
+            return tr("User Name");
         }
     }
     return QAbstractTableModel::headerData(section, orientation, role);
@@ -83,9 +85,9 @@ QVariant AutoFillModel::data(const QModelIndex &index, int role) const
                 if (key.contains(QLatin1String("pass")))
                     continue;
                 if (key.contains(QLatin1String("user"))
-                    || key.contains(QLatin1String("email"))
-                    || key.contains(QLatin1String("login"))
-                    || key == QLatin1String("u"))
+                        || key.contains(QLatin1String("email"))
+                        || key.contains(QLatin1String("login"))
+                        || key == QLatin1String("u"))
                     return element.second;
                 choices.append(element.second);
                 help.append(element.first);

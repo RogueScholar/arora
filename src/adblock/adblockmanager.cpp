@@ -115,8 +115,8 @@ QUrl AdBlockManager::customSubscriptionUrl()
     QUrl location = customSubscriptionLocation();
     QString encodedUrl = QString::fromUtf8(location.toEncoded());
     QUrl url(QString(QLatin1String("abp:subscribe?location=%1&title=%2"))
-            .arg(encodedUrl)
-            .arg(tr("Custom Rules")));
+             .arg(encodedUrl)
+             .arg(tr("Custom Rules")));
     return url;
 }
 

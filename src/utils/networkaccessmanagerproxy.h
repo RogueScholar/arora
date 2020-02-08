@@ -40,10 +40,14 @@ public:
     NetworkAccessManagerProxy(QObject *parent = 0);
 
     void setPrimaryNetworkAccessManager(NetworkAccessManagerProxy *primaryManager);
-    NetworkAccessManagerProxy *primaryNetworkAccessManager() const { return m_primaryManager; }
+    NetworkAccessManagerProxy *primaryNetworkAccessManager() const {
+        return m_primaryManager;
+    }
 
     void setWebPage(WebPageProxy *page);
-    WebPageProxy *webPage() const { return m_webPage; };
+    WebPageProxy *webPage() const {
+        return m_webPage;
+    };
 
 protected:
     QNetworkReply *createRequest(QNetworkAccessManager::Operation op, const QNetworkRequest &request, QIODevice *outgoingData = 0);

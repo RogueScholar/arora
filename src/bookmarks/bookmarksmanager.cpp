@@ -132,8 +132,8 @@ void BookmarksManager::load()
     m_bookmarkRootNode = reader.read(bookmarkFile);
     if (reader.error() != QXmlStreamReader::NoError) {
         QMessageBox::warning(0, QLatin1String("Loading Bookmark"),
-            tr("Error when loading bookmarks on line %1, column %2:\n"
-               "%3").arg(reader.lineNumber()).arg(reader.columnNumber()).arg(reader.errorString()));
+                             tr("Error when loading bookmarks on line %1, column %2:\n"
+                                "%3").arg(reader.lineNumber()).arg(reader.columnNumber()).arg(reader.errorString()));
     }
 
     QList<BookmarkNode*> others;
@@ -142,7 +142,7 @@ void BookmarksManager::load()
         if (node->type() == BookmarkNode::Folder) {
             // Automatically convert
             if ((node->title == tr("Toolbar Bookmarks")
-                 || node->title == QLatin1String(BOOKMARKBAR)) && !m_toolbar) {
+                    || node->title == QLatin1String(BOOKMARKBAR)) && !m_toolbar) {
                 node->title = tr(BOOKMARKBAR);
 
                 m_toolbar = node;
@@ -150,7 +150,7 @@ void BookmarksManager::load()
 
             // Automatically convert
             if ((node->title == tr("Menu")
-                 || node->title == QLatin1String(BOOKMARKMENU)) && !m_menu) {
+                    || node->title == QLatin1String(BOOKMARKMENU)) && !m_menu) {
                 node->title = tr(BOOKMARKMENU);
                 m_menu = node;
             }
@@ -283,7 +283,7 @@ void BookmarksManager::importBookmarks()
     supportedFormats << tr("HTML Netscape bookmarks").append(QLatin1String("(*.html)"));
 
     QString fileName = QFileDialog::getOpenFileName(0, tr("Open File"),
-                                                    QString(), supportedFormats.join(QLatin1String(";;")));
+                       QString(), supportedFormats.join(QLatin1String(";;")));
     if (fileName.isEmpty())
         return;
 
@@ -299,11 +299,11 @@ void BookmarksManager::importBookmarks()
         if (process.error() != QProcess::UnknownError) {
             if (process.error() == QProcess::FailedToStart) {
                 QMessageBox::warning(0, tr("htmlToXBel tool required"),
-                    tr("htmlToXBel tool, which is shipped with Arora and is needed to import HTML bookmarks, "
-                       "is not installed or not available in the search paths."));
+                                     tr("htmlToXBel tool, which is shipped with Arora and is needed to import HTML bookmarks, "
+                                        "is not installed or not available in the search paths."));
             } else {
                 QMessageBox::warning(0, tr("Loading Bookmark"),
-                    tr("Error when loading HTML bookmarks: %1\n").arg(process.errorString()));
+                                     tr("Error when loading HTML bookmarks: %1\n").arg(process.errorString()));
             }
             return;
         }
@@ -313,8 +313,8 @@ void BookmarksManager::importBookmarks()
     }
     if (reader.error() != QXmlStreamReader::NoError) {
         QMessageBox::warning(0, QLatin1String("Loading Bookmark"),
-            tr("Error when loading bookmarks on line %1, column %2:\n"
-               "%3").arg(reader.lineNumber()).arg(reader.columnNumber()).arg(reader.errorString()));
+                             tr("Error when loading bookmarks on line %1, column %2:\n"
+                                "%3").arg(reader.lineNumber()).arg(reader.columnNumber()).arg(reader.errorString()));
         delete importRootNode;
         return;
     }
@@ -327,8 +327,8 @@ void BookmarksManager::importBookmarks()
 void BookmarksManager::exportBookmarks()
 {
     QString fileName = QFileDialog::getSaveFileName(0, tr("Save File"),
-                                tr("%1 Bookmarks.xbel").arg(QCoreApplication::applicationName()),
-                                tr("XBEL bookmarks").append(QLatin1String("(*.xbel *.xml)")));
+                       tr("%1 Bookmarks.xbel").arg(QCoreApplication::applicationName()),
+                       tr("XBEL bookmarks").append(QLatin1String("(*.xbel *.xml)")));
     if (fileName.isEmpty())
         return;
 
@@ -369,7 +369,7 @@ void RemoveBookmarksCommand::redo()
 }
 
 InsertBookmarksCommand::InsertBookmarksCommand(BookmarksManager *m_bookmarkManagaer,
-                BookmarkNode *parent, BookmarkNode *node, int row)
+        BookmarkNode *parent, BookmarkNode *node, int row)
     : RemoveBookmarksCommand(m_bookmarkManagaer, parent, row)
 {
     setText(BookmarksManager::tr("Insert Bookmark"));
@@ -377,7 +377,7 @@ InsertBookmarksCommand::InsertBookmarksCommand(BookmarksManager *m_bookmarkManag
 }
 
 ChangeBookmarkCommand::ChangeBookmarkCommand(BookmarksManager *m_bookmarkManagaer, BookmarkNode *node,
-                        const QString &newValue, bool title)
+        const QString &newValue, bool title)
     : QUndoCommand()
     , m_bookmarkManagaer(m_bookmarkManagaer)
     , m_title(title)

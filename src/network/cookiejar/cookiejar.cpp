@@ -265,7 +265,7 @@ bool CookieJar::setCookiesFromUrl(const QList<QNetworkCookie> &cookieList, const
     // pass exceptions
     bool acceptInitially = (m_acceptCookies != AcceptNever);
     if ((acceptInitially && !eBlock)
-        || (!acceptInitially && (eAllow || eAllowSession))) {
+            || (!acceptInitially && (eAllow || eAllowSession))) {
         // pass url domain == cookie domain
         QDateTime soon = QDateTime::currentDateTime();
         soon = soon.addDays(90);
@@ -283,8 +283,8 @@ bool CookieJar::setCookiesFromUrl(const QList<QNetworkCookie> &cookieList, const
                     cookie.setExpirationDate(QDateTime());
                 }
                 if (m_keepCookies == KeepUntilTimeLimit
-                    && !cookie.isSessionCookie()
-                    && cookie.expirationDate() > soon) {
+                        && !cookie.isSessionCookie()
+                        && cookie.expirationDate() > soon) {
                     cookie.setExpirationDate(soon);
                 }
                 lst += cookie;
@@ -295,12 +295,12 @@ bool CookieJar::setCookiesFromUrl(const QList<QNetworkCookie> &cookieList, const
                     if (m_acceptCookies == AcceptAlways) {
                         QList<QNetworkCookie> cookies = allCookies();
                         QList<QNetworkCookie>::Iterator it = cookies.begin(),
-                                   end = cookies.end();
+                                                        end = cookies.end();
                         for (; it != end; ++it) {
                             // does this cookie already exist?
                             if (cookie.name() == it->name() &&
-                                cookie.domain() == it->domain() &&
-                                cookie.path() == it->path()) {
+                                    cookie.domain() == it->domain() &&
+                                    cookie.path() == it->path()) {
                                 // found a match
                                 cookies.erase(it);
                                 break;
@@ -311,10 +311,10 @@ bool CookieJar::setCookiesFromUrl(const QList<QNetworkCookie> &cookieList, const
                         setAllCookies(cookies);
                         addedCookies = true;
                     }
-    #if 0
+#if 0
                     else
                         qWarning() << "setCookiesFromUrl failed" << url << cookieList.value(0).toRawForm();
-    #endif
+#endif
                 }
 #if 0
             } else {
@@ -364,8 +364,8 @@ bool CookieJar::isOnDomainList(const QStringList &rules, const QString &domain)
         } else {
             QStringRef domainEnding = domain.rightRef(rule.size() + 1);
             if (!domainEnding.isEmpty()
-                && domainEnding.at(0) == QLatin1Char('.')
-                && domain.endsWith(rule)) {
+                    && domainEnding.at(0) == QLatin1Char('.')
+                    && domain.endsWith(rule)) {
                 return true;
             }
 

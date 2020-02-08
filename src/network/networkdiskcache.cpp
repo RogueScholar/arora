@@ -38,7 +38,7 @@ NetworkDiskCache::NetworkDiskCache(QObject *parent)
     , m_private(false)
 {
     QString diskCacheDirectory = QStandardPaths::writableLocation(QStandardPaths::CacheLocation)
-                                + QLatin1String("/browser");
+                                 + QLatin1String("/browser");
     setCacheDirectory(diskCacheDirectory);
     connect(BrowserApplication::instance(), SIGNAL(privacyChanged(bool)),
             this, SLOT(privacyChanged(bool)));

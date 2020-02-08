@@ -113,10 +113,10 @@ WebView::WebView(QWidget *parent)
 #if QT_VERSION >= 0x040600
     QPalette p;
     if (p.color(QPalette::Window) != Qt::white) {
-/* TODO: Qt 5 port?
-        QWindowsStyle s;
-        p = s.standardPalette();
-        setPalette(p);*/
+        /* TODO: Qt 5 port?
+                QWindowsStyle s;
+                p = s.standardPalette();
+                setPalette(p);*/
     }
 #endif
     connect(page(), SIGNAL(statusBarMessage(const QString&)),
@@ -269,8 +269,8 @@ void WebView::contextMenuEvent(QContextMenuEvent *event)
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
     QWebElement element = r.element();
     if (!element.isNull()
-        && element.tagName().toLower() == QLatin1String("input")
-        && element.attribute(QLatin1String("type"), QLatin1String("text")) == QLatin1String("text")) {
+            && element.tagName().toLower() == QLatin1String("input")
+            && element.attribute(QLatin1String("type"), QLatin1String("text")) == QLatin1String("text")) {
         if (menu->isEmpty()) {
             menu->addAction(pageAction(QWebPage::Copy));
         } else {
@@ -482,8 +482,8 @@ void WebView::addSearchEngine()
     bool ok = true;
     if (searchEngines.count() > 1) {
         QString searchEngine = QInputDialog::getItem(this, tr("Search engine"),
-                                                    tr("Choose the desired search engine"), searchEngines.keys(),
-                                                    0, false, &ok);
+                               tr("Choose the desired search engine"), searchEngines.keys(),
+                               0, false, &ok);
         if (!ok)
             return;
         if (!searchEngines[searchEngine].isEmpty())
@@ -652,8 +652,8 @@ void WebView::dropEvent(QDropEvent *event)
 {
     QWebView::dropEvent(event);
     if (!event->isAccepted()
-        && event->source() != this
-        && event->possibleActions() & Qt::CopyAction) {
+            && event->source() != this
+            && event->possibleActions() & Qt::CopyAction) {
 
         QUrl url;
         if (!event->mimeData()->urls().isEmpty())
@@ -672,7 +672,7 @@ void WebView::mouseReleaseEvent(QMouseEvent *event)
     const bool isAccepted = event->isAccepted();
     m_page->event(event);
     if (!event->isAccepted()
-        && (BrowserApplication::instance()->eventMouseButtons() & Qt::MidButton)) {
+            && (BrowserApplication::instance()->eventMouseButtons() & Qt::MidButton)) {
         QUrl url(QApplication::clipboard()->text(QClipboard::Selection));
         if (!url.isEmpty() && url.isValid() && !url.scheme().isEmpty()) {
             BrowserApplication::instance()->setEventMouseButtons(Qt::NoButton);
@@ -741,8 +741,8 @@ void WebView::keyPressEvent(QKeyEvent *event)
 void WebView::accessKeyShortcut()
 {
     if (!hasFocus()
-        || !m_accessKeysPressed
-        || !m_enableAccessKeys)
+            || !m_accessKeysPressed
+            || !m_enableAccessKeys)
         return;
     if (m_accessKeyLabels.isEmpty()) {
         showAccessKeys();
@@ -835,7 +835,7 @@ void WebView::showAccessKeys()
         foreach (const QWebElement &element, result) {
             const QRect geometry = element.geometry();
             if (geometry.size().isEmpty()
-                || !viewport.contains(geometry.topLeft())) {
+                    || !viewport.contains(geometry.topLeft())) {
                 continue;
             }
             QString accessKeyAttribute = element.attribute(QLatin1String("accesskey")).toUpper();
@@ -864,9 +864,9 @@ void WebView::showAccessKeys()
         foreach (const QWebElement &element, result) {
             const QRect geometry = element.geometry();
             if (unusedKeys.isEmpty()
-                || alreadyLabeled.contains(element)
-                || geometry.size().isEmpty()
-                || !viewport.contains(geometry.topLeft())) {
+                    || alreadyLabeled.contains(element)
+                    || geometry.size().isEmpty()
+                    || !viewport.contains(geometry.topLeft())) {
                 continue;
             }
             QChar accessKey;

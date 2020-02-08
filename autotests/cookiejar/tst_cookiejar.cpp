@@ -73,10 +73,14 @@ class SubCookieJar : public CookieJar
 {
 public:
     void call_cookiesChanged()
-        { return SubCookieJar::cookiesChanged(); }
+    {
+        return SubCookieJar::cookiesChanged();
+    }
 
     static bool call_isOnDomainList(QStringList const &list, QString const &domain)
-        { return SubCookieJar::isOnDomainList(list, domain); }
+    {
+        return SubCookieJar::isOnDomainList(list, domain);
+    }
 };
 
 // This will be called before the first test function is executed.

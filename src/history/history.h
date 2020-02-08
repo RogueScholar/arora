@@ -119,7 +119,10 @@ public:
     HistoryFilterModel(QAbstractItemModel *sourceModel, QObject *parent = 0);
 
     inline bool historyContains(const QString &url) const
-        { load(); return m_historyHash.contains(url); }
+    {
+        load();
+        return m_historyHash.contains(url);
+    }
     int historyLocation(const QString &url) const;
 
     enum Roles {
@@ -162,7 +165,7 @@ private:
 
         bool operator==(const HistoryData &other) const {
             return (tailOffset == other.tailOffset)
-                && (frecency == -1 || other.frecency == -1 || frecency == other.frecency);
+                   && (frecency == -1 || other.frecency == -1 || frecency == other.frecency);
         }
         bool operator!=(const HistoryData &other) const {
             return !(*this == other);

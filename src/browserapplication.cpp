@@ -107,9 +107,9 @@ BrowserApplication::BrowserApplication(int &argc, char **argv)
     QCoreApplication::setApplicationName(QLatin1String("Arora"));
     QCoreApplication::setApplicationVersion(QLatin1String("0.11.0"
 #ifdef GITVERSION
-    " (Git: " GITCHANGENUMBER " " GITVERSION ")"
+                                            " (Git: " GITCHANGENUMBER " " GITVERSION ")"
 #endif
-    ));
+                                                         ));
 
 #ifndef AUTOTESTS
     connect(this, SIGNAL(messageReceived(QLocalSocket *)),
@@ -285,10 +285,10 @@ void BrowserApplication::quitBrowser()
             QWidget *widget = mainWindow();
             QApplication::alert(widget);
             int ret = QMessageBox::warning(widget, QString(),
-                               tr("There are %1 windows and %2 tabs open\n"
-                                  "Do you want to quit anyway?").arg(m_mainWindows.count()).arg(tabCount),
-                               QMessageBox::Yes | QMessageBox::No,
-                               QMessageBox::No);
+                                           tr("There are %1 windows and %2 tabs open\n"
+                                              "Do you want to quit anyway?").arg(m_mainWindows.count()).arg(tabCount),
+                                           QMessageBox::Yes | QMessageBox::No,
+                                           QMessageBox::No);
             if (ret == QMessageBox::No)
                 return;
         }
@@ -358,7 +358,7 @@ void BrowserApplication::loadSettings()
     defaultSettings->setFontFamily(QWebSettings::StandardFont, standardFont.family());
     defaultSettings->setFontSize(QWebSettings::DefaultFontSize, standardFont.pointSize());
     int minimumFontSize = settings.value(QLatin1String("minimumFontSize"),
-                defaultSettings->fontSize(QWebSettings::MinimumFontSize)).toInt();
+                                         defaultSettings->fontSize(QWebSettings::MinimumFontSize)).toInt();
     defaultSettings->setFontSize(QWebSettings::MinimumFontSize, minimumFontSize);
 
     QString fixedFontFamily = defaultSettings->fontFamily(QWebSettings::FixedFont);
@@ -464,7 +464,7 @@ bool BrowserApplication::restoreLastSession()
         settings.beginGroup(QLatin1String("MainWindow"));
         if (settings.value(QLatin1String("restoring"), false).toBool()) {
             QMessageBox::StandardButton result = QMessageBox::question(0, tr("Restore failed"),
-                tr("Arora crashed while trying to restore this session.  Should I try again?"), QMessageBox::Yes | QMessageBox::No);
+                                                 tr("Arora crashed while trying to restore this session.  Should I try again?"), QMessageBox::Yes | QMessageBox::No);
             if (result == QMessageBox::No)
                 return false;
         }

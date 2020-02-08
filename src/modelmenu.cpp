@@ -211,7 +211,7 @@ void ModelMenu::createMenu(const QModelIndex &parent, int max, QMenu *parentMenu
             createMenu(idx, -1, menu);
         } else {
             if (m_separatorRole != 0
-                && idx.data(m_separatorRole).toBool())
+                    && idx.data(m_separatorRole).toBool())
                 addSeparator();
             else
                 menu->addAction(makeAction(idx));

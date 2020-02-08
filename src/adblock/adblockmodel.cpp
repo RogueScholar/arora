@@ -80,7 +80,8 @@ QVariant AdBlockModel::headerData(int section, Qt::Orientation orientation, int 
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
         switch (section) {
-        case 0: return tr("Rule");
+        case 0:
+            return tr("Rule");
         }
     }
     return QAbstractItemModel::headerData(section, orientation, role);
@@ -89,8 +90,8 @@ QVariant AdBlockModel::headerData(int section, Qt::Orientation orientation, int 
 QVariant AdBlockModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid()
-        || index.model() != this
-        || index.column() != 0)
+            || index.model() != this
+            || index.column() != 0)
         return QVariant();
 
     switch (role) {
@@ -222,9 +223,9 @@ bool AdBlockModel::removeRows(int row, int count, const QModelIndex &parent)
 bool AdBlockModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (!index.isValid()
-        || index.model() != this
-        || index.column() != 0
-        || (flags(index) & Qt::ItemIsEditable) == 0)
+            || index.model() != this
+            || index.column() != 0
+            || (flags(index) & Qt::ItemIsEditable) == 0)
         return false;
 
     disconnect(m_manager, SIGNAL(rulesChanged()), this, SLOT(rulesChanged()));

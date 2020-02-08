@@ -291,7 +291,7 @@ void DownloadItem::downloadReadyRead()
             getFileName();
         if (!m_output.open(QIODevice::WriteOnly)) {
             downloadInfoLabel->setText(tr("Error opening output file: %1")
-                    .arg(m_output.errorString()));
+                                       .arg(m_output.errorString()));
             stop();
             emit statusChanged();
             return;
@@ -300,7 +300,7 @@ void DownloadItem::downloadReadyRead()
     }
     if (-1 == m_output.write(m_reply->readAll())) {
         downloadInfoLabel->setText(tr("Error saving: %1")
-                .arg(m_output.errorString()));
+                                   .arg(m_output.errorString()));
         stopButton->click();
     } else {
         m_startedSaving = true;
@@ -412,17 +412,17 @@ void DownloadItem::updateInfoLabel()
         }
 
         info = QString(tr("%1 of %2 (%3/sec) - %4"))
-            .arg(DownloadManager::dataString(m_bytesReceived))
-            .arg(bytesTotal == 0 ? tr("?") : DownloadManager::dataString(bytesTotal))
-            .arg(DownloadManager::dataString((int)speed))
-            .arg(remaining);
+               .arg(DownloadManager::dataString(m_bytesReceived))
+               .arg(bytesTotal == 0 ? tr("?") : DownloadManager::dataString(bytesTotal))
+               .arg(DownloadManager::dataString((int)speed))
+               .arg(remaining);
     } else {
         if (m_bytesReceived == bytesTotal)
             info = DownloadManager::dataString(m_output.size());
         else
             info = tr("%1 of %2 - Download Complete")
-                .arg(DownloadManager::dataString(m_bytesReceived))
-                .arg(DownloadManager::dataString(bytesTotal));
+                   .arg(DownloadManager::dataString(m_bytesReceived))
+                   .arg(DownloadManager::dataString(bytesTotal));
     }
     downloadInfoLabel->setText(info);
 }
@@ -507,10 +507,10 @@ bool DownloadManager::allowQuit()
 {
     if (activeDownloads() >= 1) {
         int choice = QMessageBox::warning(this, QString(),
-                                        tr("There are %1 downloads in progress\n"
-                                           "Do you want to quit anyway?").arg(activeDownloads()),
-                                        QMessageBox::Yes | QMessageBox::No,
-                                        QMessageBox::No);
+                                          tr("There are %1 downloads in progress\n"
+                                             "Do you want to quit anyway?").arg(activeDownloads()),
+                                          QMessageBox::Yes | QMessageBox::No,
+                                          QMessageBox::No);
         if (choice == QMessageBox::No) {
             show();
             return false;
@@ -640,11 +640,11 @@ void DownloadManager::updateRow(DownloadItem *item)
     bool remove = false;
     QWebSettings *globalSettings = QWebSettings::globalSettings();
     if (!item->downloading()
-        && globalSettings->testAttribute(QWebSettings::PrivateBrowsingEnabled))
+            && globalSettings->testAttribute(QWebSettings::PrivateBrowsingEnabled))
         remove = true;
 
     if (item->downloadedSuccessfully()
-        && removePolicy() == DownloadManager::SuccessFullDownload) {
+            && removePolicy() == DownloadManager::SuccessFullDownload) {
         remove = true;
     }
     if (remove)
@@ -702,8 +702,8 @@ void DownloadManager::load()
     QByteArray value = settings.value(QLatin1String("removeDownloadsPolicy"), QLatin1String("Never")).toByteArray();
     QMetaEnum removePolicyEnum = staticMetaObject.enumerator(staticMetaObject.indexOfEnumerator("RemovePolicy"));
     m_removePolicy = removePolicyEnum.keyToValue(value) == -1 ?
-                        Never :
-                        static_cast<RemovePolicy>(removePolicyEnum.keyToValue(value));
+                     Never :
+                     static_cast<RemovePolicy>(removePolicyEnum.keyToValue(value));
 
     int i = 0;
     QString key = QString(QLatin1String("download_%1_")).arg(i);
@@ -829,7 +829,7 @@ bool DownloadModel::removeRows(int row, int count, const QModelIndex &parent)
     int lastRow = row + count - 1;
     for (int i = lastRow; i >= row; --i) {
         if (m_downloadManager->m_downloads.at(i)->downloadedSuccessfully()
-            || m_downloadManager->m_downloads.at(i)->tryAgainButton->isEnabled()) {
+                || m_downloadManager->m_downloads.at(i)->tryAgainButton->isEnabled()) {
             beginRemoveRows(parent, i, i);
             m_downloadManager->m_downloads.takeAt(i)->deleteLater();
             endRemoveRows();

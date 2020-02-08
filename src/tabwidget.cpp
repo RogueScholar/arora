@@ -186,7 +186,7 @@ TabWidget::TabWidget(QWidget *parent)
     m_locationBars = new QStackedWidget(this);
 
     connect(BrowserApplication::historyManager(), SIGNAL(historyCleared()),
-        this, SLOT(historyCleared()));
+            this, SLOT(historyCleared()));
 
     // Initialize Actions' labels
     retranslate();
@@ -398,7 +398,7 @@ WebView *TabWidget::makeNewTab(bool makeCurrent)
     connect(webView, SIGNAL(loadStarted()),
             this, SLOT(webViewLoadStarted()));
     connect(webView, SIGNAL(loadProgress(int)),
-                this, SLOT(webViewLoadProgress(int)));
+            this, SLOT(webViewLoadProgress(int)));
     connect(webView, SIGNAL(loadFinished(bool)),
             this, SLOT(webViewLoadFinished(bool)));
     connect(webView, SIGNAL(iconChanged()),
@@ -645,7 +645,7 @@ void TabWidget::webViewLoadProgress(int progress)
     int index = webViewIndex(webView);
 
     if (index != currentIndex()
-        || index < 0)
+            || index < 0)
         return;
 
     double totalBytes = (double) webView->webPage()->totalBytes() / 1024;
@@ -828,7 +828,7 @@ QUrl TabWidget::guessUrlFromString(const QString &string)
 #endif
 
     if (url.scheme() == QLatin1String("about")
-        && url.path() == QLatin1String("home"))
+            && url.path() == QLatin1String("home"))
         url = QUrl(QLatin1String("qrc:/startpage.html"));
 
     // QUrl::isValid() is too much tolerant.
@@ -955,43 +955,43 @@ WebView *TabWidget::getView(OpenUrlIn tab, WebView *currentView)
 {
     WebView *webView = 0;
     switch (tab) {
-        case NewWindow: {
+    case NewWindow: {
 #ifdef USERMODIFIEDBEHAVIOR_DEBUG
-            qDebug() << __FUNCTION__ << "NewWindow";
+        qDebug() << __FUNCTION__ << "NewWindow";
 #endif
-            BrowserMainWindow *newMainWindow = BrowserApplication::instance()->newMainWindow();
-            webView = newMainWindow->currentTab();
-            webView->setFocus();
-            break;
-        }
+        BrowserMainWindow *newMainWindow = BrowserApplication::instance()->newMainWindow();
+        webView = newMainWindow->currentTab();
+        webView->setFocus();
+        break;
+    }
 
-        case NewSelectedTab: {
+    case NewSelectedTab: {
 #ifdef USERMODIFIEDBEHAVIOR_DEBUG
-            qDebug() << __FUNCTION__ << "NewSelectedTab";
+        qDebug() << __FUNCTION__ << "NewSelectedTab";
 #endif
-            webView = makeNewTab(true);
-            webView->setFocus();
-            break;
-        }
+        webView = makeNewTab(true);
+        webView->setFocus();
+        break;
+    }
 
-        case NewNotSelectedTab: {
+    case NewNotSelectedTab: {
 #ifdef USERMODIFIEDBEHAVIOR_DEBUG
-            qDebug() << __FUNCTION__ << "NewNotSelectedTab";
+        qDebug() << __FUNCTION__ << "NewNotSelectedTab";
 #endif
-            webView = makeNewTab(false);
-            break;
-        }
+        webView = makeNewTab(false);
+        break;
+    }
 
-        case CurrentTab:
-        default:
+    case CurrentTab:
+    default:
 #ifdef USERMODIFIEDBEHAVIOR_DEBUG
-            qDebug() << __FUNCTION__ << "CurrentTab";
+        qDebug() << __FUNCTION__ << "CurrentTab";
 #endif
-            webView = currentView;
-            if (!webView)
-                return 0;
-            webView->setFocus();
-            break;
+        webView = currentView;
+        if (!webView)
+            return 0;
+        webView->setFocus();
+        break;
     }
     return webView;
 }

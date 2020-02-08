@@ -174,7 +174,7 @@ void NetworkAccessManager::loadSettings()
 
     settings.beginGroup(QLatin1String("network"));
     QStringList acceptList = settings.value(QLatin1String("acceptLanguages"),
-            AcceptLanguageDialog::defaultAcceptList()).toStringList();
+                                            AcceptLanguageDialog::defaultAcceptList()).toStringList();
     m_acceptLanguage = AcceptLanguageDialog::httpString(acceptList);
 
     bool cacheEnabled = settings.value(QLatin1String("cacheEnabled"), true).toBool();
@@ -304,13 +304,13 @@ void NetworkAccessManager::sslErrors(QNetworkReply *reply, const QList<QSslError
 
     QString errors = errorStrings.join(QLatin1String("</li><li>"));
     int ret = QMessageBox::warning(mainWindow,
-                           QCoreApplication::applicationName() + tr(" - SSL Errors"),
-                           tr("<qt>SSL Errors:"
-                              "<br/><br/>for: <tt>%1</tt>"
-                              "<ul><li>%2</li></ul>\n\n"
-                              "Do you want to ignore these errors?</qt>").arg(reply->url().toString()).arg(errors),
-                           QMessageBox::Yes | QMessageBox::No,
-                           QMessageBox::No);
+                                   QCoreApplication::applicationName() + tr(" - SSL Errors"),
+                                   tr("<qt>SSL Errors:"
+                                      "<br/><br/>for: <tt>%1</tt>"
+                                      "<ul><li>%2</li></ul>\n\n"
+                                      "Do you want to ignore these errors?</qt>").arg(reply->url().toString()).arg(errors),
+                                   QMessageBox::Yes | QMessageBox::No,
+                                   QMessageBox::No);
 
     if (ret == QMessageBox::Yes) {
         if (ca_new.count() > 0) {
@@ -318,11 +318,11 @@ void NetworkAccessManager::sslErrors(QNetworkReply *reply, const QList<QSslError
             for (int i = 0; i < ca_new.count(); ++i)
                 certinfos += certToFormattedString(ca_new.at(i));
             ret = QMessageBox::question(mainWindow, QCoreApplication::applicationName(),
-                tr("<qt>Certificates:<br/>"
-                   "%1<br/>"
-                   "Do you want to accept all these certificates?</qt>")
-                    .arg(certinfos.join(QString())),
-                QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+                                        tr("<qt>Certificates:<br/>"
+                                           "%1<br/>"
+                                           "Do you want to accept all these certificates?</qt>")
+                                        .arg(certinfos.join(QString())),
+                                        QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
             if (ret == QMessageBox::Yes) {
                 ca_merge += ca_new;
 

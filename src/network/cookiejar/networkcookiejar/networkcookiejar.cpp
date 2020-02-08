@@ -57,7 +57,7 @@
 
 
 NetworkCookieJar::NetworkCookieJar(QObject *parent)
-        : QNetworkCookieJar(parent)
+    : QNetworkCookieJar(parent)
 {
     d = new NetworkCookieJarPrivate;
 }
@@ -196,8 +196,8 @@ void NetworkCookieJar::endSession()
     QList<QNetworkCookie>::const_iterator i = cookies.constBegin();
     for (; i != cookies.constEnd();) {
         if (i->isSessionCookie()
-            || (!i->isSessionCookie() && now > i->expirationDate())) {
-                d->tree.remove(splitHost(i->domain()), *i);
+                || (!i->isSessionCookie() && now > i->expirationDate())) {
+            d->tree.remove(splitHost(i->domain()), *i);
         }
         ++i;
     }
@@ -263,8 +263,8 @@ bool NetworkCookieJar::setCookiesFromUrl(const QList<QNetworkCookie> &cookieList
         QList<QNetworkCookie>::const_iterator it = cookies.constBegin();
         for (; it != cookies.constEnd(); ++it) {
             if (cookie.name() == it->name() &&
-                cookie.domain() == it->domain() &&
-                cookie.path() == it->path()) {
+                    cookie.domain() == it->domain() &&
+                    cookie.path() == it->path()) {
                 d->tree.remove(urlHost, *it);
                 break;
             }
@@ -327,8 +327,8 @@ bool NetworkCookieJarPrivate::matchesBlacklist(const QString &string) const
         setSecondLevelDomain = true;
     }
     QStringList::const_iterator i =
-         qBinaryFind(secondLevelDomains.constBegin(), secondLevelDomains.constEnd(), string);
-        return (i != secondLevelDomains.constEnd());
+        qBinaryFind(secondLevelDomains.constBegin(), secondLevelDomains.constEnd(), string);
+    return (i != secondLevelDomains.constEnd());
 }
 
 bool NetworkCookieJarPrivate::matchingDomain(const QNetworkCookie &cookie, const QUrl &url) const
