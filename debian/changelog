@@ -1,0 +1,113 @@
+arora (0.11.0+qt5+git20140406-1) unstable; urgency=low
+
+  * New upstream snapshot. Updated to svuorela-qt5 branch hash
+    0.11.0-31-g37dc64f. It includes various qt5 related regressions
+    with Q_WS_X11 not being defined.
+  * Add build-arch and build-indep targets.
+  * Bump standards versions
+
+ -- Sune Vuorela <sune@debian.org>  Sun, 06 Apr 2014 20:18:52 +0200
+
+arora (0.11.0+qt5+git20140405-1) unstable; urgency=low
+
+  * New upstream snapshot
+    - including jturcotte's Qt5 patchset to give a newer qtwebkit.
+    - including a patch by me to limit the used ssl ciphers.
+      Closes: #739229
+    - Fixes the start page's xml. Closes: #668808
+    - Fixes crash in bookmarknode dtor. Closes: #736196
+  * Refresh patch.
+  * Low urgency because switching to Qt5 is not a small thing.
+
+ -- Sune Vuorela <sune@debian.org>  Sat, 05 Apr 2014 20:59:22 +0200
+
+arora (0.11.0-1) unstable; urgency=low
+
+  * New upstream release (Closes: 634817)
+
+ -- Sune Vuorela <sune@debian.org>  Fri, 22 Jun 2012 22:45:39 +0200
+
+arora (0.11.0-0ubuntu1) oneiric; urgency=low
+
+  * New upstream release.
+  * Remove patches applied upstream:
+    - kubuntu_01_locationbar_painting_fix.diff
+    - kubuntu_04_webpage_destructor.diff
+    - kubuntu_05_no_javascript_fix.diff
+    - kubuntu_07_fix_build_metatype.diff
+  * Refresh remaining patches.
+
+ -- Maia Kozheva <sikon@ubuntu.com>   Wed, 08 Jun 2011 10:45:25 +0700
+
+arora (0.10.2-2) unstable; urgency=low
+
+  * qtwebkit build-dep. Closes: 618237
+  * Switch to quilt format
+  * fix build issues with new qtwebkit
+
+ -- Sune Vuorela <sune@debian.org>  Tue, 15 Mar 2011 21:41:59 +0100
+
+arora (0.10.2-1) unstable; urgency=low
+
+  * New upstream release
+    - fixes build with newer Qt. Closes: #581285
+  * Use debian address
+
+ -- Sune Vuorela <sune@debian.org>  Tue, 18 May 2010 15:54:20 +0200
+
+arora (0.10.1-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Sune Vuorela <debian@pusling.com>  Mon, 12 Oct 2009 11:25:21 +0200
+
+arora (0.9.0-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Sune Vuorela <debian@pusling.com>  Mon, 31 Aug 2009 21:49:44 +0200
+
+arora (0.8.0-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Sune Vuorela <debian@pusling.com>  Wed, 12 Aug 2009 22:18:45 +0200
+
+arora (0.7.0-1) unstable; urgency=low
+
+  * New upstream release
+  * Update copyright file
+  * Qt4.5 is in testing, let us just require Qt4.4 for now.
+
+ -- Sune Vuorela <debian@pusling.com>  Mon, 25 May 2009 01:11:52 +0200
+
+arora (0.6.1-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Sune Vuorela <debian@pusling.com>  Sat, 09 May 2009 13:08:50 +0200
+
+arora (0.6-1) unstable; urgency=low
+
+  * New upstream. (Closes: #525862)
+    - Crtl-Q works. (Closes: #520279)
+    - Letters with accents are supposed to work: (Closes: #520419)
+  * Keep strong dependencies for now to ensure feature parity across
+    architectures.
+  * Add menu file, thanks Pawel Sadkowski. (Closes: 513794)
+
+ -- Sune Vuorela <debian@pusling.com>  Tue, 28 Apr 2009 09:53:33 +0200
+
+arora (0.5-1) unstable; urgency=low
+
+  * New upstream release. (Closes: #519400)
+  * Update copyright file.
+  * Make sure not to compress makefile before it is installed.
+
+ -- Sune Vuorela <debian@pusling.com>  Sun, 15 Mar 2009 21:42:10 +0100
+
+arora (0.4-1) unstable; urgency=low
+
+  * New upstream release. (Closes: #501524)
+
+ -- Sune Vuorela <pusling@eider.killmulehill.net>  Sun, 12 Oct 2008 12:20:34 +0200
